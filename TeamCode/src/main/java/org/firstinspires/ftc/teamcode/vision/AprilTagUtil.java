@@ -22,12 +22,21 @@ public class AprilTagUtil {
     static List<AprilTagDetection> detections;
     public static boolean initialized;
 
-    private static class TagDistance {
+    public static class TagDistance {
         public double range;
         public double bearing;
+        static TagDistance invalid = new TagDistance(-1, -1);
         public TagDistance(double range, double bearing) {
             this.range = range;
             this.bearing = bearing;
+        }
+
+        public static TagDistance invalidTag() {
+            return invalid;
+        }
+
+        public static boolean isInvalid(TagDistance tag) {
+            return tag == invalid;
         }
     }
 
@@ -62,10 +71,12 @@ public class AprilTagUtil {
     }
 
     public static void detectTags() {
+        throwIfNotInit();
         detections = aprilTagProcessor.getDetections();
     }
 
     public static int[] getDetectedIDs() {
+        throwIfNotInit();
         int[] ret = new int[detections.size()];
         for(AprilTagDetection detection : detections) {
             ret[detections.indexOf(detection)] = detection.id;
@@ -74,10 +85,11 @@ public class AprilTagUtil {
     }
 
     public static TagDistance getTagDistance(int tag) {
+        throwIfNotInit();
         for (AprilTagDetection detection : detections) {
             if(tag != detection.id) continue;
             return new TagDistance(detection.ftcPose.range, detection.ftcPose.bearing);
         }
-        return new TagDistance(-1, -1);
+        return TagDistance.invalidTag();
     }
 }

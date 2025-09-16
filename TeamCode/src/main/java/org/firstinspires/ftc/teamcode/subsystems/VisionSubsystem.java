@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.vision.AprilTagUtil;
 
 import java.util.Arrays;
@@ -21,6 +23,8 @@ public class VisionSubsystem extends SubsystemBase {
         OBELISK2(22),
         OBELISK3(23);
 
+
+        private final int id;
 
         private TagIDs(int id) {
             this.id = id;
@@ -44,7 +48,14 @@ public class VisionSubsystem extends SubsystemBase {
         return idList.contains(tag);
     }
 
-    public boolean getTagDistance(int tag) {
+    public double getTagDistance(int tag) {
+        AprilTagUtil.TagDistance rawDistance = AprilTagUtil.getTagDistance(tag);
+        return 0; //TODO: Fix
+    }
 
+    double rotationAdjustment(AprilTagUtil.TagDistance distance) {
+        Vector2d g = new Vector2d(-distance.range * Math.cos(distance.bearing), distance.range * Math.sin(distance.bearing) + Constants.Hardware.turretSpinnerRadius);
+        Vector2d n = new Vector2d(-Constants.Hardware.turretSpinnerRadius * Math.cos(90 - distance.bearing), Constants.Hardware.turretSpinnerRadius * Math.sin(90 - distance.bearing));
+        return Math.sqrt(Math.pow(Math.abs(g.y) - Math.abs(n.y), 2) + Math.pow(Math.abs(g.x) - Math.abs(n.x), 2));
     }
 }

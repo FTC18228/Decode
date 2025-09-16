@@ -33,6 +33,9 @@ public class Constants {
         public static String rightTurretWheelName = "leftWheel";
         public static String leftTurretPivotName = "leftPivot";
         public static String rightTurretPivotName = "rightPivot";
+        public static String turretSpinnerName = "turretSpinner";
+        public static double turretDistanceFromCamera = 0;
+        public static double turretSpinnerRadius = 3;
         public static String webcamName = "Webcam 1";
     }
 }
