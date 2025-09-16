@@ -15,10 +15,10 @@ public class TurretSubsystem extends SubsystemBase {
     Servo rightPivot;
     double servoRange = 180;
     public TurretSubsystem(HardwareMap hardwareMap) {
-        this.leftWheel = hardwareMap.get(DcMotor.class, Constants.HardwareMap.leftTurretWheelName);
-        this.rightWheel = hardwareMap.get(DcMotor.class, Constants.HardwareMap.rightTurretWheelName);
-        this.leftPivot = hardwareMap.get(Servo.class, Constants.HardwareMap.leftTurretPivotName);
-        this.rightPivot = hardwareMap.get(Servo.class, Constants.HardwareMap.rightTurretPivotName);
+        this.leftWheel = hardwareMap.get(DcMotor.class, Constants.Hardware.leftTurretWheelName);
+        this.rightWheel = hardwareMap.get(DcMotor.class, Constants.Hardware.rightTurretWheelName);
+        this.leftPivot = hardwareMap.get(Servo.class, Constants.Hardware.leftTurretPivotName);
+        this.rightPivot = hardwareMap.get(Servo.class, Constants.Hardware.rightTurretPivotName);
     }
 
     Vector2d position(double time, Vector2d speed, double a) {
