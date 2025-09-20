@@ -25,7 +25,7 @@ public class ActionCommand implements Command { // Thanks 14380 for allowing thi
 
     @Override
     public Set<Subsystem> getRequirements() {
-        return requirements
+        return requirements;
     }
 
     @Override

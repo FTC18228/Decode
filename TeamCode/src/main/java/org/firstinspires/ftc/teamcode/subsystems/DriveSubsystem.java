@@ -6,14 +6,17 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 public class DriveSubsystem extends SubsystemBase {
     MecanumDrive drive;
     double speed;
+    Telemetry telemetry;
     public DriveSubsystem(HardwareMap hardwareMap, Pose2d defaultPose, double speed) {
         this.drive = new MecanumDrive(hardwareMap, defaultPose);
         this.speed = speed;
+        this.telemetry = telemetry;
     }
 
     double rotationOf(double x, double y) {
@@ -26,8 +29,8 @@ public class DriveSubsystem extends SubsystemBase {
     public void drive(double leftX, double leftY, double rightX) {
         double rotation = drive.localizer.getPose().heading.toDouble();
         Vector2d velocity = new Vector2d(
-                leftY * Math.cos(-rotation) - leftX * Math.sin(-rotation),
-                leftY * Math.sin(-rotation) + leftX * Math.cos(-rotation)
+                -leftY * Math.cos(-rotation) + leftX * Math.sin(-rotation),
+                -leftY * Math.sin(-rotation) - leftX * Math.cos(-rotation)
         );
         drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), rightX));
         drive.updatePoseEstimate();
@@ -36,10 +39,15 @@ public class DriveSubsystem extends SubsystemBase {
     public void drive(double leftX, double leftY, double rightX, double rightY, boolean useSnapRotation) {
         double rotation = drive.localizer.getPose().heading.toDouble();
         Vector2d velocity = new Vector2d(
-                leftY * Math.cos(-rotation) - leftX * Math.sin(-rotation),
-                leftY * Math.sin(-rotation) + leftX * Math.cos(-rotation)
+                -leftY * Math.cos(-rotation) + leftX * Math.sin(-rotation),
+                -leftY * Math.sin(-rotation) - leftX * Math.cos(-rotation)
         );
-        drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), rightX));
+
+        double angular;
+        if(!useSnapRotation) angular = rightX;
+        else angular = rotation - rotationOf(rightX, rightY);
+
+        drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), angular));
         drive.updatePoseEstimate();
     }
 
