@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.JoystickValues;
 import org.firstinspires.ftc.teamcode.Vector2DSupplier;
+import org.firstinspires.ftc.teamcode.debug.DriveDebug;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 
 import java.util.function.DoubleSupplier;
@@ -15,11 +16,13 @@ public class DefaultDrive extends CommandBase implements DriveCommandType{
     DriveSubsystem driveSubsystem;
     Vector2DSupplier leftStick;
     Vector2DSupplier rightStick;
+    Telemetry telemetry;
     double speed;
-    public DefaultDrive(DriveSubsystem driveSubsystem, DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX) {
+    public DefaultDrive(DriveSubsystem driveSubsystem, DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX, Telemetry telemetry) {
         this.driveSubsystem = driveSubsystem;
         setJoystickValues(leftX, leftY, rightX, () -> {return 0;});
         addRequirements(driveSubsystem);
+        this.telemetry = telemetry;
     }
 
     @Override
@@ -41,7 +44,8 @@ public class DefaultDrive extends CommandBase implements DriveCommandType{
     @Override
     public void drive() {
         JoystickValues values = getJoystickValues();
-        driveSubsystem.drive(values.leftX, values.leftY, values.rightX);
+        DriveDebug debug = driveSubsystem.drive(values.leftX, values.leftY, values.rightX);
+        debug.displayTelemetry(telemetry);
     }
 
     @Override
