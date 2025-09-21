@@ -29,8 +29,8 @@ public class DriveSubsystem extends SubsystemBase {
     public void drive(double leftX, double leftY, double rightX) { //THIS IS DEFAULT ONE
         double rotation = drive.localizer.getPose().heading.toDouble();
         Vector2d velocity = new Vector2d(
-                leftY * Math.cos(-rotation) + leftX * Math.sin(-rotation),
-                leftY * Math.sin(-rotation) - leftX * Math.cos(-rotation)
+                -leftY * Math.cos(-rotation) - leftX * Math.sin(-rotation),
+                -leftY * Math.sin(-rotation) + leftX * Math.cos(-rotation)
         );
         drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), -rightX));
         drive.updatePoseEstimate();
