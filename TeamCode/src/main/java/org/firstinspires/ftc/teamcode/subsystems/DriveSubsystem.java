@@ -26,25 +26,25 @@ public class DriveSubsystem extends SubsystemBase {
         return Math.toRadians(Math.signum(x) * 90) - Math.atan(y / x);
     }
 
-    public void drive(double leftX, double leftY, double rightX) {
+    public void drive(double leftX, double leftY, double rightX) { //THIS IS DEFAULT ONE
         double rotation = drive.localizer.getPose().heading.toDouble();
         Vector2d velocity = new Vector2d(
-                -leftY * Math.cos(-rotation) + leftX * Math.sin(-rotation),
-                -leftY * Math.sin(-rotation) - leftX * Math.cos(-rotation)
+                leftY * Math.cos(-rotation) + leftX * Math.sin(-rotation),
+                leftY * Math.sin(-rotation) - leftX * Math.cos(-rotation)
         );
-        drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), rightX));
+        drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), -rightX));
         drive.updatePoseEstimate();
     }
 
     public void drive(double leftX, double leftY, double rightX, double rightY, boolean useSnapRotation) {
         double rotation = drive.localizer.getPose().heading.toDouble();
         Vector2d velocity = new Vector2d(
-                -leftY * Math.cos(-rotation) + leftX * Math.sin(-rotation),
-                -leftY * Math.sin(-rotation) - leftX * Math.cos(-rotation)
+                -leftY * Math.cos(-rotation) - leftX * Math.sin(-rotation),
+                leftY * Math.sin(-rotation) + leftX * Math.cos(-rotation)
         );
 
         double angular;
-        if(!useSnapRotation) angular = rightX;
+        if(!useSnapRotation) angular = -rightX;
         else angular = rotation - rotationOf(rightX, rightY);
 
         drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), angular));

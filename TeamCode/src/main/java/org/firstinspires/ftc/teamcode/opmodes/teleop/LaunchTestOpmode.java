@@ -13,20 +13,15 @@ public class LaunchTestOpmode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        DcMotor leftTurret = hardwareMap.get(DcMotor.class, "turretLeft");
-        DcMotor rightTurret = hardwareMap.get(DcMotor.class, "turretRight");
+        DcMotor turret = hardwareMap.get(DcMotor.class, "motor");
 
         waitForStart();
 
         while(opModeIsActive()) {
-            if(gamepad1.left_trigger >= 0.5) {
-                leftTurret.setPower(-   1);
+            if(gamepad1.left_trigger >= 0.5 || gamepad1.right_trigger >= 0.5) {
+                turret.setPower(1);
             }
-            else {leftTurret.setPower(0);}
-            if(gamepad1.right_trigger >= 0.5) {
-                rightTurret.setPower(1);
-            }
-            else {rightTurret.setPower(0);}
+            else {turret.setPower(0);}
         }
     }
 }
