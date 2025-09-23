@@ -33,7 +33,7 @@ public class DriveSubsystem extends SubsystemBase {
         );
         drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), -rightX));
         drive.updatePoseEstimate();
-        return new DriveDebug(velocity.x, velocity.y, -rotation);
+        return new DriveDebug(velocity.x, velocity.y, -rotation, drive.localizer.getPose().position.x, drive.localizer.getPose().position.y);
     }
 
     public DriveDebug drive(double leftX, double leftY, double rightX, double rightY, boolean useSnapRotation) {
@@ -49,7 +49,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), angular));
         drive.updatePoseEstimate();
-        return new DriveDebug(velocity.x, velocity.y, -rotation);
+        return new DriveDebug(velocity.x, velocity.y, -rotation, drive.localizer.getPose().position.x, drive.localizer.getPose().position.y);
     }
 
     public void changeSpeed(double newSpeed) {

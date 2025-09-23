@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.debug;
 
+import com.acmerobotics.roadrunner.Pose2d;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Arrays;
@@ -7,15 +9,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DriveDebug implements DebugInfo<String, Double> {
-    Map<String, Double> values;
-    public DriveDebug(double xVel, double yVel, double rotation, double xPose, double yPose) {
-        String[] keys = {"xVel", "yVel", "rotation", "xPose", "yPose"};
-        Double[] vals = {xVel, yVel, rotation, xPose, yPose};
+public class PinpointDebug implements DebugInfo<String, Pose2d> {
+    Map<String, Pose2d> values;
+    public PinpointDebug(Pose2d txWorld, Pose2d txRobot) {
+        String[] keys = {"txWorld", "txRobot"};
+        Pose2d[] vals = {txWorld, txRobot};
         setValues(keys, vals);
     }
     @Override
-    public void setValues(String[] keys, Double[] values) {
+    public void setValues(String[] keys, Pose2d[] values) {
         this.values = new HashMap<>();
         for(String key : keys) {
             this.values.put(key, values[Arrays.stream(keys).collect(Collectors.toList()).indexOf(key)]);
@@ -23,12 +25,12 @@ public class DriveDebug implements DebugInfo<String, Double> {
 
     }
     @Override
-    public Map<String, Double> getInfo() {
+    public Map<String, Pose2d> getInfo() {
         return values;
     }
 
     @Override
-    public Double getValue(String key) {
+    public Pose2d getValue(String key) {
         return values.get(key);
     }
 
