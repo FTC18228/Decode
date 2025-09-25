@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.geometry.Vector2d;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,12 +15,16 @@ public class TurretSubsystem extends SubsystemBase {
     DcMotor rightWheel;
     Servo leftPivot;
     Servo rightPivot;
+    MotorEx spinner;
     double servoRange = 180;
+    double degreeCounts;
     public TurretSubsystem(HardwareMap hardwareMap) {
-        this.leftWheel = hardwareMap.get(DcMotor.class, Constants.HardwareMap.leftTurretWheelName);
-        this.rightWheel = hardwareMap.get(DcMotor.class, Constants.HardwareMap.rightTurretWheelName);
-        this.leftPivot = hardwareMap.get(Servo.class, Constants.HardwareMap.leftTurretPivotName);
-        this.rightPivot = hardwareMap.get(Servo.class, Constants.HardwareMap.rightTurretPivotName);
+        this.leftWheel = hardwareMap.get(DcMotor.class, Constants.Hardware.leftTurretWheelName);
+        this.rightWheel = hardwareMap.get(DcMotor.class, Constants.Hardware.rightTurretWheelName);
+        this.leftPivot = hardwareMap.get(Servo.class, Constants.Hardware.leftTurretPivotName);
+        this.rightPivot = hardwareMap.get(Servo.class, Constants.Hardware.rightTurretPivotName);
+        this.spinner = new MotorEx(hardwareMap, Constants.Hardware.turretSpinnerName, Motor.GoBILDA.BARE);
+        degreeCounts = this.spinner.getCPR() / 360;
     }
 
     Vector2d position(double time, Vector2d speed, double a) {
@@ -43,7 +49,7 @@ public class TurretSubsystem extends SubsystemBase {
         if (speed.getY() > Constants.Physics.terminalVelocity) a =  Constants.Physics.terminalVelocity - 0.001;
         else a = atanh(speed.getY() / Constants.Physics.terminalVelocity);
         double x0 = 2 * a / Constants.Physics.yCoefficient;
-        Vector2d dGuess = position(x0, speed, a);;
+        Vector2d dGuess = position(x0, speed, a);
         double thetaGuess = Constants.Physics.theta0;
 
         while(dGuess.getX() - target > Constants.Physics.toleranceThreshold) {
@@ -61,11 +67,12 @@ public class TurretSubsystem extends SubsystemBase {
         return thetaGuess;
     }
 
-    public boolean aimTurret(double target) {
+    public boolean aimTurret(double target, double bearing) {
         double theta = thetaEstimate(target);
         double servoPosition = theta / servoRange; //TODO: Change to make in range 35, 90 inclusive because we love inclusivity :)
         leftPivot.setPosition(servoPosition);
         rightPivot.setPosition(1 - servoPosition); //TODO: Figure out which is opposite
+        spinner.setTargetPosition((int) Math.round(bearing * degreeCounts));
         return true; //TODO: Return some value to ensure its aimed and the target is reachable
     }
 

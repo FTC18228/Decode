@@ -20,30 +20,16 @@ import java.util.function.BooleanSupplier;
 public class LaunchTestOpmode extends CommandOpMode {
 
     @Override
-    public void initialize() {
-        GamepadEx gamepad = new GamepadEx(gamepad1);
-        TurretSubsystem turretSubsystem = new TurretSubsystem(hardwareMap);
+    public void runOpMode() throws InterruptedException {
+        DcMotor turret = hardwareMap.get(DcMotor.class, "motor");
 
-        new Trigger(new BooleanSupplier() {
-            @Override
-            public boolean getAsBoolean() {
-                return gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5;
-            }
-        }).whenActive(
-                new InstantCommand(turretSubsystem::fireTurret)
-        ).whenInactive(
-                new InstantCommand(turretSubsystem::stopTurret)
-        );
+        waitForStart();
 
-        new Trigger(new BooleanSupplier() {
-            @Override
-            public boolean getAsBoolean() {
-                return gamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5;
+        while(opModeIsActive()) {
+            if(gamepad1.left_trigger >= 0.5 || gamepad1.right_trigger >= 0.5) {
+                turret.setPower(1);
             }
-        }).whenActive(
-                new InstantCommand(turretSubsystem::fireTurret)
-        ).whenInactive(
-                new InstantCommand(turretSubsystem::stopTurret)
-        );
+            else {turret.setPower(0);}
+        }
     }
 }
