@@ -19,7 +19,8 @@ public class DriveTestOpmode extends CommandOpMode {
                 drive,
                 () -> {return driverGamepad.getLeftX();},
                 () -> {return driverGamepad.getLeftY();},
-                () -> {return driverGamepad.getRightX();}
+                () -> {return driverGamepad.getRightX();},
+                telemetry
         ));
     }
 }
