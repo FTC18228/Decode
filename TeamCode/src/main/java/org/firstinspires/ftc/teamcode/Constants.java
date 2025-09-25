@@ -1,17 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 public class Constants {
     public static class Physics {
-
-        public static double toleranceThreshold = 0.05; // Tolerance that the turret will get to(in meters)
-        public static double theta0 = 55; // Initial guess of theta(in degrees)
-        // Could change, but probably best not to
-        public static double mass = 0.074842741; // Mass of the ball
-        static double latitude = -27.3428554; // Useless V1
-        static int altitude = 10; // Useless V2
-        static int temperature = 20; // Useless V3
         // Can be changed!!!
         static double rotatorEfficiency = 0.25; //TODO: Find an optimal value for this based off tests
         static double motorRPM = 2800; // Self explanatory
+        public static double toleranceThreshold = 0.05; // Tolerance that the turret will get to(in meters)
+        public static double theta0 = 55; // Initial guess of theta(in degrees)
+
+        // Don't change(unless you know what you're doing)
+        static double latitude = -27.3428554; // Useless V1
+        static int altitude = 10; // Useless V2
+        static int temperature = 20; // Useless V3
+        public static double mass = 0.074842741; // Mass of the ball
         static double earthRadius = 6371000; // Take a guess as to what this does
         static double omega = 0.00007292; // I don't know what this does, I just know its needed
         public static double gravity = (9.80665 - (earthRadius * Math.pow(omega, 2) * Math.pow(Math.cos(Math.toRadians(latitude)), 2))) * Math.pow(earthRadius / (earthRadius + latitude), 2); // Acceleration due to gravity
@@ -28,10 +28,14 @@ public class Constants {
         public static double xCoefficient = mass * gravity / Math.pow(terminalVelocity, 2); // Coefficient of the x position function
     }
 
-    public static class HardwareMap {
+    public static class Hardware {
         public static String leftTurretWheelName = "leftWheel";
         public static String rightTurretWheelName = "leftWheel";
         public static String leftTurretPivotName = "leftPivot";
         public static String rightTurretPivotName = "rightPivot";
+        public static String turretSpinnerName = "turretSpinner";
+        public static double turretDistanceFromCamera = 0;
+        public static double turretSpinnerRadius = 3;
+        public static String webcamName = "Webcam 1";
     }
 }
