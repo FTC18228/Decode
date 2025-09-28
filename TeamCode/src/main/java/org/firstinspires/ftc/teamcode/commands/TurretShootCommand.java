@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 public class TurretShootCommand extends CommandBase {
     TurretSubsystem turretSubsystem;
+    //TODO: Fix and add vision subsystem
     DoubleSupplier target;
 
     public TurretShootCommand(TurretSubsystem turretSubsystem, DoubleSupplier target) {
@@ -17,8 +18,8 @@ public class TurretShootCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(turretSubsystem.aimTurret(target.getAsDouble())) turretSubsystem.fireTurret();
-        else {} //TODO: Do something
+        //if(turretSubsystem.aimTurret(target.getAsDouble())) turretSubsystem.fireTurret();
+        //else {} //TODO: Do something
     }
 
     @Override

@@ -48,6 +48,7 @@ public class AprilTagUtil {
         //processorBuilder.setCameraPose() //TODO Change this
         aprilTagProcessor = processorBuilder.build();
 
+        visionBuilder = new VisionPortal.Builder();
         visionBuilder.setCamera(hardwareMap.get(WebcamName.class, Constants.Hardware.webcamName));
         visionBuilder.addProcessor(aprilTagProcessor);
         visionBuilder.setShowStatsOverlay(true); //Change if we would rather hide this
@@ -91,5 +92,9 @@ public class AprilTagUtil {
             return new TagDistance(detection.ftcPose.range, detection.ftcPose.bearing);
         }
         return TagDistance.invalidTag();
+    }
+
+    public static int getAmountDetected() {
+        return detections.size();
     }
 }

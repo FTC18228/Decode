@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,8 +17,9 @@ import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import java.util.function.BooleanSupplier;
 
+//@Disabled
 @TeleOp(name="Launch Test", group="tests")
-public class LaunchTestOpmode extends CommandOpMode {
+public class LaunchTestOpmode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
