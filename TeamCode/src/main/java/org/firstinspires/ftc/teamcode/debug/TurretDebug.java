@@ -3,16 +3,15 @@ package org.firstinspires.ftc.teamcode.debug;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TagInfo implements DebugInfo<String, Double>{
+public class TurretDebug implements DebugInfo<String, Double>{
     Map<String, Double> values;
-    public TagInfo(int id, double distance, double bearing, double fixedDistance) {
-        String[] keys = {"id", "distance", "bearing", "fixed distance", "distance difference"};
-        Double[] vals = {(double) id, distance, bearing, fixedDistance, distance - fixedDistance};
+    public TurretDebug(double hoodPosition, double hoodDegrees, double distanceEstimate) {
+        String[] keys = {"hood position", "hood degrees", "estimated target"};
+        Double[] vals = {hoodPosition, hoodDegrees, distanceEstimate};
         setValues(keys, vals);
     }
 

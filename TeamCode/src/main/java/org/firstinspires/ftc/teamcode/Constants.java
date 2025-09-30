@@ -3,7 +3,7 @@ public class Constants {
     public static class Physics {
         // Can be changed!!!
         static double rotatorEfficiency = 0.25; //TODO: Find an optimal value for this based off tests
-        static double motorRPM = 2800; // Self explanatory
+        static double motorRPM = 6000; // Self explanatory
         public static double toleranceThreshold = 0.05; // Tolerance that the turret will get to(in meters)
         public static double theta0 = 55; // Initial guess of theta(in degrees)
 
@@ -26,16 +26,15 @@ public class Constants {
         public static double terminalVelocity = Math.sqrt((2 * mass * gravity) / (pressure * surfaceArea * dragCoefficient)); // Ball terminal velocity with gravity
         public static double yCoefficient = gravity / terminalVelocity; // Coefficient of the y position function
         public static double xCoefficient = mass * gravity / Math.pow(terminalVelocity, 2); // Coefficient of the x position function
+        public static double targetYPosition = 1.1;
     }
 
     public static class Hardware {
-        public static String leftTurretWheelName = "leftWheel";
-        public static String rightTurretWheelName = "leftWheel";
-        public static String leftTurretPivotName = "leftPivot";
-        public static String rightTurretPivotName = "rightPivot";
-        public static String turretSpinnerName = "turretSpinner";
+        public static String turretWheelName = "launch";
+        public static String turretSpinnerName = "spinner";
+        public static String turretHoodName = "hood";
         public static double turretDistanceFromCamera = 0;
-        public static double turretSpinnerRadius = 3;
+        public static double turretSpinnerRadius = 167.0 / 2;
         public static String webcamName = "Webcam 1";
     }
 }

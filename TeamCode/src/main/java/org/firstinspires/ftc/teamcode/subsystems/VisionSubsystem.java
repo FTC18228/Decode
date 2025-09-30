@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 public class VisionSubsystem extends SubsystemBase {
     //TODO: Make vision do something vision-y
+    double invalidAmount = -1;
+    int cantSeeObelisk = 0;
     public VisionSubsystem(HardwareMap hardwareMap) {
         AprilTagUtil.initialize(hardwareMap);
     }
@@ -35,9 +37,12 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public int checkObeliskState() {
-        //if (cantSeeObelisk) return -1;
-        //else return obeliskPosition12or3
-        return 1;
+        double min = Double.MAX_VALUE;
+        int finalId = cantSeeObelisk;
+        for(int id : new int[]{TagIDs.OBELISK1.id, TagIDs.OBELISK2.id, TagIDs.OBELISK3.id}) {
+            if(isTagActive(id) && getTagDistance(id) < min) finalId = id;
+        }
+        return finalId;
     }
 
     public double getDistanceToTarget(boolean onBlue) {
@@ -45,9 +50,8 @@ public class VisionSubsystem extends SubsystemBase {
         if(onBlue) desiredTagID = TagIDs.BLUEGOAL.id;
         else desiredTagID = TagIDs.REDGOAL.id;
 
-        if(!isTagActive(desiredTagID)) return -1;
-
-        return 1;
+        if(!isTagActive(desiredTagID)) return invalidAmount;
+        return getTagDistance(desiredTagID);
     }
 
     public boolean isTagActive(int tag) {
@@ -57,7 +61,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     public double getTagDistance(int tag) {
         AprilTagUtil.TagDistance rawDistance = AprilTagUtil.getTagDistance(tag);
-        if(isInvalidDistance(rawDistance)) return -1;
+        if(isInvalidDistance(rawDistance)) return invalidAmount;
         return rotationAdjustment(rawDistance);
     }
 
@@ -67,7 +71,8 @@ public class VisionSubsystem extends SubsystemBase {
         int i = 0;
         for(int id : AprilTagUtil.getDetectedIDs()) {
             AprilTagUtil.TagDistance tagDistance = AprilTagUtil.getTagDistance(id);
-            tagInfos[i] = new TagInfo(id, tagDistance.range, tagDistance.bearing);
+            tagInfos[i] = new TagInfo(id, tagDistance.range, tagDistance.bearing, rotationAdjustment(tagDistance));
+            i++;
         }
         return new VisionDebug(tagInfos);
     }
@@ -79,10 +84,14 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public boolean isInvalidDistance(double distance) {
-        return distance == -1;
+        return distance == invalidAmount;
     }
 
     public boolean isInvalidDistance(AprilTagUtil.TagDistance distance) {
         return AprilTagUtil.TagDistance.isInvalid(distance);
+    }
+
+    public boolean isInvalidObelisk(int id) {
+        return id == cantSeeObelisk;
     }
 }
