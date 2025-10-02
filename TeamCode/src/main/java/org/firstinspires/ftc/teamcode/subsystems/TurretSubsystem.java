@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.debug.TurretDebug;
 
+import java.util.concurrent.Phaser;
+
 public class TurretSubsystem extends SubsystemBase {
     DcMotor wheel;
     Servo hood;
@@ -18,6 +20,9 @@ public class TurretSubsystem extends SubsystemBase {
     double servoRange = 75;
 
     double degreeCounts;
+    double o = Constants.Physics.mass / Constants.Physics.xCoefficient;
+    double w = Constants.Physics.speed / Constants.Physics.terminalVelocity;
+    double z = Math.exp(-(Constants.Physics.gravity * Constants.Physics.targetYPosition / Math.pow(Constants.Physics.terminalVelocity, 2)));
     public TurretSubsystem(HardwareMap hardwareMap) {
         this.wheel = hardwareMap.get(DcMotor.class, Constants.Hardware.turretWheelName);
         this.hood = hardwareMap.get(Servo.class, Constants.Hardware.turretHoodName);
@@ -25,18 +30,21 @@ public class TurretSubsystem extends SubsystemBase {
         degreeCounts = this.spinner.getCPR() / 360;
     }
 
-    double yPosition(double x, Vector2d speed, double a) {
-        double w = Math.pow(Constants.Physics.terminalVelocity, 2) / Constants.Physics.gravity;
-        double z = Constants.Physics.mass * (Math.exp(x * Constants.Physics.xCoefficient / Constants.Physics.mass) - 1);
-        double denom = Math.cosh(a);
-        return w * Math.log(Math.cosh(a - (Constants.Physics.yCoefficient * z / speed.getX())) / denom);
+    double xPosition(double t) {
+        double q = -w * Math.cos(t);
+        double n = 1 - (Math.pow(w, 2) * Math.pow(Math.sin(t), 2));
+        double lhs = acosh(z / Math.sqrt(n));
+        double rhs = atanh(w * Math.sin(t));
+        return o * Math.log1p(q * (lhs - rhs));
     }
-    double yPositionDTheta(double x, Vector2d speed, double a) {
-        double w = Math.pow(Constants.Physics.terminalVelocity, 2) / Constants.Physics.gravity;
-        double z = Constants.Physics.mass * (Math.exp(x * Constants.Physics.xCoefficient / Constants.Physics.mass) - 1);
-        double arg = a - (Constants.Physics.yCoefficient * z / speed.getX());
-        double coefficient = Constants.Physics.yCoefficient * w * z * speed.getY();
-        return coefficient * Math.tanh(arg) / Math.pow(speed.getX(), 2);
+    double xPositionDTheta(double t) {
+        double q = -w * Math.cos(t);
+        double n = 1 - (Math.pow(w, 2) * Math.pow(Math.sin(t), 2));
+        double nlhs = (o * z * Math.pow(w, 2) * Math.sin(2 * t)) / (2 * n * Math.sqrt(Math.pow(z, 2) - n));
+        double nrhs = w * o * Math.cos(t) / (-n);
+        double dlhs = acosh(z / Math.sqrt(n));
+        double drhs = atanh(w * Math.sin(t));
+        return (nlhs + nrhs) / (dlhs - drhs + (1 / q));
     }
 
     /** @noinspection SpellCheckingInspection*/
@@ -44,35 +52,31 @@ public class TurretSubsystem extends SubsystemBase {
         return 0.5 * Math.log((1 + x) / (1 - x));
     }
     double acosh(double x) {return Math.log(x + Math.sqrt(Math.pow(x, 2) - 1));}
-    double xEstimate(Vector2d speed, double a) {
-        // I call it the definer because it defines the function
-        // If the argument of the acosh is > 1, its real valued
-        // Else its complex valued
-        double definer = acosh(Math.exp(-(Constants.Physics.gravity * Constants.Physics.targetYPosition) / Math.pow(Constants.Physics.terminalVelocity, 2)) * Math.cosh(a));
-        double coefficient = Constants.Physics.mass / Constants.Physics.xCoefficient;
-        return coefficient * Math.log(Constants.Physics.xCoefficient * speed.getX() * (definer - a) / (-Constants.Physics.yCoefficient * Constants.Physics.mass));
+    double getTMeasure(double a) {
+        double decider = Math.exp(-Constants.Physics.gravity * Constants.Physics.targetYPosition / Math.pow(Constants.Physics.terminalVelocity, 2));
+        return (acosh(decider * Math.cosh(a)) - a) / -Constants.Physics.yCoefficient;
     }
-
     //TODO: Fix up so it works :3
     double thetaEstimate(double target) {
         Vector2d speed = new Vector2d(Constants.Physics.speed * Math.cos(Constants.Physics.theta0), Constants.Physics.speed * Math.sin(Constants.Physics.theta0));
         double a;
         if (speed.getY() > Constants.Physics.terminalVelocity) a =  Constants.Physics.terminalVelocity - 0.001;
         else a = atanh(speed.getY() / Constants.Physics.terminalVelocity);
-        double x0 = xEstimate(speed, a);
-        Vector2d dGuess = position(x0, speed, a);
+        double t0 = getTMeasure(a);
+        double xGuess = xPosition(t0);
         double thetaGuess = Constants.Physics.theta0;
 
-        while(dGuess.getX() - target > Constants.Physics.toleranceThreshold) {
+        while(xGuess- target > Constants.Physics.toleranceThreshold) {
             // Estimate
-            double deltaD = dGuess.getX() - target;
-            thetaGuess = thetaGuess - (deltaD / positionDTheta(x0, speed, a).getX());
+            double deltaD = xGuess - target;
+            thetaGuess = thetaGuess - (deltaD / xPositionDTheta(t0));
 
             // Update
             speed = new Vector2d(Constants.Physics.speed * Math.cos(thetaGuess), Constants.Physics.speed * Math.sin(thetaGuess));
             if (speed.getY() > Constants.Physics.terminalVelocity) a =  Constants.Physics.terminalVelocity - 0.001;
             else a = atanh(speed.getY() / Constants.Physics.terminalVelocity);
-            dGuess = position(x0, speed, a);
+            t0 = getTMeasure(a);
+            xGuess = xPosition(t0);
         }
 
         return thetaGuess;
@@ -106,7 +110,7 @@ public class TurretSubsystem extends SubsystemBase {
         return new TurretDebug(
                 hood.getPosition(),
                 hood.getPosition() * servoRange,
-                position(x0, speed, a).getX()
+                0
         );
     }
 
