@@ -137,6 +137,10 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     public void moveHood(double degrees) {
-        hood.setPosition(degrees / servoRange);
+        double a = 0.000000435526;
+        double b = 0.000334834;
+        double c = 0.00986936;
+        double d = 0.851435;
+        hood.setPosition(a * Math.pow(degrees, 3) + b * Math.pow(degrees, 2) + c * degrees + d);
     }
 }
