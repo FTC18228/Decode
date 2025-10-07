@@ -17,8 +17,10 @@ public class VisionSubsystem extends SubsystemBase {
     //TODO: Make vision do something vision-y
     double invalidAmount = -1;
     int cantSeeObelisk = 0;
-    public VisionSubsystem(HardwareMap hardwareMap) {
+    boolean onBlue;
+    public VisionSubsystem(HardwareMap hardwareMap, boolean onBlue) {
         AprilTagUtil.initialize(hardwareMap);
+        this.onBlue = onBlue;
     }
 
     public enum TagIDs {
@@ -45,13 +47,20 @@ public class VisionSubsystem extends SubsystemBase {
         return finalId;
     }
 
-    public double getDistanceToTarget(boolean onBlue) {
+    public double getDistanceToTarget() {
         int desiredTagID;
         if(onBlue) desiredTagID = TagIDs.BLUEGOAL.id;
         else desiredTagID = TagIDs.REDGOAL.id;
 
         if(!isTagActive(desiredTagID)) return invalidAmount;
         return getTagDistance(desiredTagID);
+    }
+
+    public double getBearingToTarget() {
+        int desiredTagID;
+        if(onBlue) desiredTagID = TagIDs.BLUEGOAL.id;
+        else desiredTagID = TagIDs.REDGOAL.id;
+        return AprilTagUtil.getTagDistance(desiredTagID).bearing;
     }
 
     public boolean isTagActive(int tag) {

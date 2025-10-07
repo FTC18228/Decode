@@ -105,6 +105,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     public boolean aimTurret(double target, double bearing) {
         double theta = thetaEstimate(target);
+        if(theta == -1) return false;
         moveHood(theta);
         spinner.setTargetPosition((int) Math.round(bearing * degreeCounts));
         return true; //TODO: Return some value to ensure its aimed and the target is reachable
