@@ -23,6 +23,11 @@ public class TurretSubsystem extends SubsystemBase {
     double o = Constants.Physics.mass / Constants.Physics.xCoefficient;
     double w = Constants.Physics.speed / Constants.Physics.terminalVelocity;
     double z = Math.exp(-(Constants.Physics.gravity * Constants.Physics.targetYPosition / Math.pow(Constants.Physics.terminalVelocity, 2)));
+    double lower = Math.asin(Math.sqrt((Math.pow(z, 2) - 1) / -Math.pow(w, 2)));
+    double upper = Math.asin(0.9999999999999 / w);
+    double maxx = xPosition(lower);
+    double minx = xPosition(upper);
+
     public TurretSubsystem(HardwareMap hardwareMap) {
         this.wheel = hardwareMap.get(DcMotor.class, Constants.Hardware.turretWheelName);
         this.hood = hardwareMap.get(Servo.class, Constants.Hardware.turretHoodName);
@@ -58,28 +63,44 @@ public class TurretSubsystem extends SubsystemBase {
     }
     //TODO: Fix up so it works :3
     double thetaEstimate(double target) {
-        Vector2d speed = new Vector2d(Constants.Physics.speed * Math.cos(Constants.Physics.theta0), Constants.Physics.speed * Math.sin(Constants.Physics.theta0));
+        if(!(minx < target) || !(maxx > target)) return -1;
+
+        double v = Constants.Physics.speed * Math.sin(Constants.Physics.theta0);
         double a;
-        if (speed.getY() > Constants.Physics.terminalVelocity) a =  Constants.Physics.terminalVelocity - 0.001;
-        else a = atanh(speed.getY() / Constants.Physics.terminalVelocity);
-        double t0 = getTMeasure(a);
-        double xGuess = xPosition(t0);
+        if(v > Constants.Physics.terminalVelocity) a = atanh((Constants.Physics.terminalVelocity - 0.001) / Constants.Physics.terminalVelocity);
+        else a = atanh(v / Constants.Physics.terminalVelocity);
+        double xGuess = xPosition(Constants.Physics.theta0);
         double thetaGuess = Constants.Physics.theta0;
+        double thetanm1 = -1;
+        double thetanm2 = -1;
+        int cons = 0;
+        double delta = xGuess - target;
 
-        while(xGuess- target > Constants.Physics.toleranceThreshold) {
-            // Estimate
-            double deltaD = xGuess - target;
-            thetaGuess = thetaGuess - (deltaD / xPositionDTheta(t0));
+        while(Math.abs(delta) > Constants.Physics.toleranceThreshold) {
+            thetanm2 = thetanm1;
+            thetanm1 = thetaGuess;
+            delta = xGuess - target;
+            double alpha = 1;
+            double oldGuess = thetaGuess;
+            thetaGuess = oldGuess - (delta / xPositionDTheta(oldGuess));
+            while(!(lower < thetaGuess) || !(upper > thetaGuess)) {
+                alpha /= 2;
+                thetaGuess = oldGuess - alpha * (delta / xPositionDTheta(oldGuess));
+            }
+            if(thetaGuess - thetanm2 > 0.000001) cons += 1;
+            if(cons == 2) {
+                alpha /= 2;
+                thetaGuess = oldGuess - alpha * (delta / xPositionDTheta(oldGuess));
+                cons = 0;
+            }
 
-            // Update
-            speed = new Vector2d(Constants.Physics.speed * Math.cos(thetaGuess), Constants.Physics.speed * Math.sin(thetaGuess));
-            if (speed.getY() > Constants.Physics.terminalVelocity) a =  Constants.Physics.terminalVelocity - 0.001;
-            else a = atanh(speed.getY() / Constants.Physics.terminalVelocity);
-            t0 = getTMeasure(a);
-            xGuess = xPosition(t0);
+            v = Constants.Physics.speed * Math.sin(Constants.Physics.theta0);
+            if(v > Constants.Physics.terminalVelocity) a = atanh((Constants.Physics.terminalVelocity - 0.001) / Constants.Physics.terminalVelocity);
+            else a = atanh(v / Constants.Physics.terminalVelocity);
+            xGuess = xPosition(thetaGuess);
         }
 
-        return thetaGuess;
+        return Math.toDegrees(thetaGuess);
     }
 
     public boolean aimTurret(double target, double bearing) {
