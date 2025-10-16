@@ -10,10 +10,10 @@ import org.firstinspires.ftc.teamcode.vision.AprilTagUtil;
 public class VisionTestOpmode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        VisionSubsystem visionSubsystem = new VisionSubsystem(hardwareMap);
+        /*VisionSubsystem visionSubsystem = new VisionSubsystem(hardwareMap);
         waitForStart();
         while(!isStopRequested()) {
             visionSubsystem.getVisionInfo().displayTelemetry(telemetry);
-        }
+        }*/
     }
 }

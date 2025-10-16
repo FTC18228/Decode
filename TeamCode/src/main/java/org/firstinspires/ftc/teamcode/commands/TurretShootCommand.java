@@ -5,8 +5,6 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 
-import java.util.function.DoubleSupplier;
-
 public class TurretShootCommand extends CommandBase {
     TurretSubsystem turretSubsystem;
     VisionSubsystem visionSubsystem;

@@ -17,7 +17,7 @@ public class TurretSubsystem extends SubsystemBase {
     DcMotor wheel;
     Servo hood;
     MotorEx spinner;
-    double servoRange = 75;
+    double servoRange = 220;
 
     double degreeCounts;
     double o = Constants.Physics.mass / Constants.Physics.xCoefficient;
@@ -62,7 +62,7 @@ public class TurretSubsystem extends SubsystemBase {
         return (acosh(decider * Math.cosh(a)) - a) / -Constants.Physics.yCoefficient;
     }
     //TODO: Fix up so it works :3
-    double thetaEstimate(double target) {
+    public double thetaEstimate(double target) {
         if(!(minx < target) || !(maxx > target)) return -1;
 
         double v = Constants.Physics.speed * Math.sin(Constants.Physics.theta0);
@@ -131,16 +131,22 @@ public class TurretSubsystem extends SubsystemBase {
         double x0 = 2 * a / Constants.Physics.yCoefficient;
         return new TurretDebug(
                 hood.getPosition(),
-                hood.getPosition() * servoRange,
-                0
+                hood.getPosition() * servoRange
         );
     }
 
-    public void moveHood(double degrees) {
+    void moveHood(double degrees) {
         double a = 0.000000435526;
         double b = 0.000334834;
         double c = 0.00986936;
-        double d = 0.851435;
-        hood.setPosition(a * Math.pow(degrees, 3) + b * Math.pow(degrees, 2) + c * degrees + d);
+        hood.setPosition(a * Math.pow(degrees, 2) + b * degrees + c);
+    }
+
+    public double hoodPosition() {
+        return hood.getPosition();
+    }
+
+    public double hoodDegrees() {
+        return hoodPosition() * servoRange;
     }
 }

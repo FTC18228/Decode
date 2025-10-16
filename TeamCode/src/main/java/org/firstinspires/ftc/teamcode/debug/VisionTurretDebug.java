@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TurretDebug implements DebugInfo<String, Double>{
+public class VisionTurretDebug implements DebugInfo<String, Double>{
     Map<String, Double> values;
-    public TurretDebug(double hoodPosition, double hoodDegrees) {
-        String[] keys = {"hood position", "hood degrees", "estimated theta"};
-        Double[] vals = {hoodPosition, hoodDegrees};
+    public VisionTurretDebug(double hoodPosition, double hoodDegrees, double thetaEstimate, double tagID, double tagDistance, double tagBearing) {
+        String[] keys = {"hood position", "hood degrees", "estimated theta", "tag ID ", "tag distance", "tag bearing"};
+        Double[] vals = {hoodPosition, hoodDegrees, thetaEstimate, tagID, tagDistance, tagBearing};
         setValues(keys, vals);
     }
 
