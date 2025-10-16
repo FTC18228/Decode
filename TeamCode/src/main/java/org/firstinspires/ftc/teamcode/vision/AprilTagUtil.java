@@ -50,10 +50,10 @@ public class AprilTagUtil {
 
         visionBuilder = new VisionPortal.Builder();
         visionBuilder.setCamera(hardwareMap.get(WebcamName.class, Constants.Hardware.webcamName));
-        //visionBuilder.addProcessor(aprilTagProcessor);
-        //visionBuilder.setShowStatsOverlay(true); //Change if we would rather hide this
+        visionBuilder.addProcessor(aprilTagProcessor);
+        visionBuilder.setShowStatsOverlay(true); //Change if we would rather hide this
         //visionBuilder.setCameraResolution(new Size(640, 480)) //TODO: Find ideal camera resolution
-        //visionBuilder.enableLiveView(true);
+        visionBuilder.enableLiveView(true);
         visionPortal = visionBuilder.build();
 
         //visionPortal.setProcessorEnabled(aprilTagProcessor, true);

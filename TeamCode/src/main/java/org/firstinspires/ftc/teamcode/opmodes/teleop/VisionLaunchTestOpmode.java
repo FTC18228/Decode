@@ -25,21 +25,21 @@ public class VisionLaunchTestOpmode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         VisionSubsystem visionSubsystem = new VisionSubsystem(hardwareMap, true);
-        //TurretSubsystem turretSubsystem = new TurretSubsystem(hardwareMap);
-        //DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap, new Pose2d(0, 0, 0), 10);
+        TurretSubsystem turretSubsystem = new TurretSubsystem(hardwareMap);
+        DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap, new Pose2d(0, 0, 0), 10);
 
         waitForStart();
         while(!isStopRequested()) {
-            //visionSubsystem.detectTags();
+            visionSubsystem.detectTags();
 
-            ///telemetry.addData("Distance: ", visionSubsystem.getDistanceToTarget());
-            //telemetry.addData("Bearing: ", visionSubsystem.getBearingToTarget());
-            //telemetry.addData("Theta estimate: ", turretSubsystem.thetaEstimate(visionSubsystem.getDistanceToTarget()));
-            //turretSubsystem.getTurretInfo().displayTelemetry(telemetry, false);
-            //telemetry.update();
+            telemetry.addData("Distance: ", visionSubsystem.getDistanceToTarget());
+            telemetry.addData("Bearing: ", visionSubsystem.getBearingToTarget());
+            telemetry.addData("Theta estimate: ", turretSubsystem.thetaEstimate(visionSubsystem.getDistanceToTarget() / 1000));
+            turretSubsystem.getTurretInfo().displayTelemetry(telemetry, false);
+            telemetry.update();
 
-            /*if(gamepad1.a) {
-                turretSubsystem.aimTurret(visionSubsystem.getDistanceToTarget(), visionSubsystem.getBearingToTarget());
+            if(gamepad1.a) {
+                turretSubsystem.aimTurret(visionSubsystem.getDistanceToTarget() / 1000, visionSubsystem.getBearingToTarget());
             }
 
             if(gamepad1.x) {
@@ -47,7 +47,7 @@ public class VisionLaunchTestOpmode extends LinearOpMode {
             }
             if(gamepad1.y) {
                 turretSubsystem.stopTurret();
-            }*/
+            }
         }
     }
 }
