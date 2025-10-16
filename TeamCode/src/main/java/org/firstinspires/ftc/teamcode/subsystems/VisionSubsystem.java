@@ -74,6 +74,10 @@ public class VisionSubsystem extends SubsystemBase {
         return rotationAdjustment(rawDistance);
     }
 
+    public void detectTags() {
+        AprilTagUtil.detectTags();
+    }
+
     public VisionDebug getVisionInfo() {
         AprilTagUtil.detectTags();
         TagInfo[] tagInfos = new TagInfo[AprilTagUtil.getAmountDetected()];

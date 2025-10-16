@@ -24,15 +24,20 @@ public class TurretSubsystem extends SubsystemBase {
     double w = Constants.Physics.speed / Constants.Physics.terminalVelocity;
     double z = Math.exp(-(Constants.Physics.gravity * Constants.Physics.targetYPosition / Math.pow(Constants.Physics.terminalVelocity, 2)));
     double lower = Math.asin(Math.sqrt((Math.pow(z, 2) - 1) / -Math.pow(w, 2)));
-    double upper = Math.asin(0.9999999999999 / w);
+    double upper;
     double maxx = xPosition(lower);
-    double minx = xPosition(upper);
+    double minx;
+    double lasttarget;
 
     public TurretSubsystem(HardwareMap hardwareMap) {
         this.wheel = hardwareMap.get(DcMotor.class, Constants.Hardware.turretWheelName);
         this.hood = hardwareMap.get(Servo.class, Constants.Hardware.turretHoodName);
         this.spinner = new MotorEx(hardwareMap, Constants.Hardware.turretSpinnerName, Motor.GoBILDA.BARE);
         degreeCounts = this.spinner.getCPR() / 360;
+
+        if(0.9999999999999 / w < 1) upper = Math.asin(0.9999999999999 / w);
+        else upper = Math.toRadians(89.9);
+        minx = xPosition(upper);
     }
 
     double xPosition(double t) {
@@ -63,7 +68,8 @@ public class TurretSubsystem extends SubsystemBase {
     }
     //TODO: Fix up so it works :3
     public double thetaEstimate(double target) {
-        if(!(minx < target) || !(maxx > target)) return -1;
+        lasttarget = target;
+        if(minx > target || maxx < target) return -1;
 
         double v = Constants.Physics.speed * Math.sin(Constants.Physics.theta0);
         double a;
@@ -107,7 +113,7 @@ public class TurretSubsystem extends SubsystemBase {
         double theta = thetaEstimate(target);
         if(theta == -1) return false;
         moveHood(theta);
-        spinner.setTargetPosition((int) Math.round(bearing * degreeCounts));
+        //spinner.setTargetPosition((int) Math.round(bearing * degreeCounts));
         return true; //TODO: Return some value to ensure its aimed and the target is reachable
     }
 
@@ -124,14 +130,14 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     public TurretDebug getTurretInfo() {
-        Vector2d speed = new Vector2d(Constants.Physics.speed * Math.cos(Constants.Physics.theta0), Constants.Physics.speed * Math.sin(Constants.Physics.theta0));
-        double a;
-        if (speed.getY() > Constants.Physics.terminalVelocity) a =  Constants.Physics.terminalVelocity - 0.001;
-        else a = atanh(speed.getY() / Constants.Physics.terminalVelocity);
-        double x0 = 2 * a / Constants.Physics.yCoefficient;
+        double q = -w * Math.cos(upper);
+        double n = 1 - (Math.pow(w, 2) * Math.pow(Math.sin(upper), 2));
+        double lhs = acosh(z / Math.sqrt(n));
+        double rhs = atanh(w * Math.sin(upper));
         return new TurretDebug(
-                hood.getPosition(),
-                hood.getPosition() * servoRange
+                minx,
+                maxx,
+                lasttarget
         );
     }
 
