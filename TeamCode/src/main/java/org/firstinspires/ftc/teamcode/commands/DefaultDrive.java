@@ -1,16 +1,14 @@
 package org.firstinspires.ftc.teamcode.commands;
 
-import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.JoystickValues;
-import org.firstinspires.ftc.teamcode.Vector2DSupplier;
+import org.firstinspires.ftc.teamcode.util.JoystickValues;
+import org.firstinspires.ftc.teamcode.util.Vector2DSupplier;
 import org.firstinspires.ftc.teamcode.debug.DriveDebug;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 public class DefaultDrive extends CommandBase implements DriveCommandType{
     DriveSubsystem driveSubsystem;
