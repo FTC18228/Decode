@@ -11,10 +11,10 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import java.util.function.DoubleSupplier;
 
 public class DefaultDrive extends CommandBase implements DriveCommandType{
-    DriveSubsystem driveSubsystem;
+    final DriveSubsystem driveSubsystem;
     Vector2DSupplier leftStick;
     Vector2DSupplier rightStick;
-    Telemetry telemetry;
+    final Telemetry telemetry;
     double speed;
     public DefaultDrive(DriveSubsystem driveSubsystem, DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX, Telemetry telemetry) {
         this.driveSubsystem = driveSubsystem;

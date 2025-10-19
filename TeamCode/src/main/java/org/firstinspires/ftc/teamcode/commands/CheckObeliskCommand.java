@@ -6,11 +6,11 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 
 public class CheckObeliskCommand extends CommandBase {
-    Command ifPosition0;
-    Command ifPosition1;
-    Command ifPosition2;
-    Command ifNone;
-    VisionSubsystem visionSubsystem;
+    final Command ifPosition0;
+    final Command ifPosition1;
+    final Command ifPosition2;
+    final Command ifNone;
+    final VisionSubsystem visionSubsystem;
     Command selectedCommand;
     public CheckObeliskCommand(Command ifPosition0, Command ifPosition1, Command ifPosition2, Command ifNone, VisionSubsystem visionSubsystem) {
         this.ifPosition0 = ifPosition0;

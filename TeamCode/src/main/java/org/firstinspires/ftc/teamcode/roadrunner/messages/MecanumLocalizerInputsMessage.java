@@ -6,14 +6,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public final class MecanumLocalizerInputsMessage {
-    public long timestamp;
-    public PositionVelocityPair leftFront;
-    public PositionVelocityPair leftBack;
-    public PositionVelocityPair rightBack;
-    public PositionVelocityPair rightFront;
-    public double yaw;
-    public double pitch;
-    public double roll;
+    public final long timestamp;
+    public final PositionVelocityPair leftFront;
+    public final PositionVelocityPair leftBack;
+    public final PositionVelocityPair rightBack;
+    public final PositionVelocityPair rightFront;
+    public final double yaw;
+    public final double pitch;
+    public final double roll;
 
     public MecanumLocalizerInputsMessage(PositionVelocityPair leftFront, PositionVelocityPair leftBack, PositionVelocityPair rightBack, PositionVelocityPair rightFront, YawPitchRollAngles angles) {
         this.timestamp = System.nanoTime();

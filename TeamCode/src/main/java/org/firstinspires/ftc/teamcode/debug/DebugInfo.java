@@ -5,8 +5,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.Map;
 
 public interface DebugInfo<K, V> {
-    public Map<K, V> getInfo();
-    public V getValue(K key);
-    public void displayTelemetry(Telemetry telemetry);
-    public void setValues(K[] keys, V[] values);
+    Map<K, V> getInfo();
+    V getValue(K key);
+    void displayTelemetry(Telemetry telemetry);
+    void setValues(K[] keys, V[] values);
 }

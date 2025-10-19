@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 import java.util.function.DoubleSupplier;
 
 public class TurretShootCommand extends CommandBase {
-    TurretSubsystem turretSubsystem;
-    DoubleSupplier target;
+    final TurretSubsystem turretSubsystem;
+    final DoubleSupplier target;
 
     public TurretShootCommand(TurretSubsystem turretSubsystem, DoubleSupplier target) {
         this.turretSubsystem = turretSubsystem;
@@ -18,7 +18,7 @@ public class TurretShootCommand extends CommandBase {
     @Override
     public void execute() {
         if(turretSubsystem.aimTurret(target.getAsDouble())) turretSubsystem.fireTurret();
-        else {} //TODO: Do something
+        //else {} //TODO: Do something
     }
 
     @Override

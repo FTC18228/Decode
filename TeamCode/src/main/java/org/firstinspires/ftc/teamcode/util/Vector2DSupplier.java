@@ -6,8 +6,8 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class Vector2DSupplier implements Supplier {
-    DoubleSupplier xSupplier;
-    DoubleSupplier ySupplier;
+    final DoubleSupplier xSupplier;
+    final DoubleSupplier ySupplier;
     public Vector2DSupplier(DoubleSupplier x, DoubleSupplier y) {
         xSupplier = x;
         ySupplier = y;

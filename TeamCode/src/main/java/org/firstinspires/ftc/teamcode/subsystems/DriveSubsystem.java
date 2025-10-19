@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.debug.DriveDebug;
 
 public class DriveSubsystem extends SubsystemBase {
-    MecanumDrive drive;
+    final MecanumDrive drive;
     double speed;
     public DriveSubsystem(HardwareMap hardwareMap, Pose2d defaultPose, double speed) {
         this.drive = new MecanumDrive(hardwareMap, defaultPose);

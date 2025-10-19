@@ -11,13 +11,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.util.Constants;
 
 public class TurretSubsystem extends SubsystemBase {
-    DcMotor leftWheel;
-    DcMotor rightWheel;
-    Servo leftPivot;
-    Servo rightPivot;
-    MotorEx spinner;
-    double servoRange = 180;
-    double degreeCounts;
+    final DcMotor leftWheel;
+    final DcMotor rightWheel;
+    final Servo leftPivot;
+    final Servo rightPivot;
+    final MotorEx spinner;
+    final double servoRange = 180;
+    final double degreeCounts;
     public TurretSubsystem(HardwareMap hardwareMap) {
         this.leftWheel = hardwareMap.get(DcMotor.class, Constants.Hardware.leftTurretWheelName);
         this.rightWheel = hardwareMap.get(DcMotor.class, Constants.Hardware.rightTurretWheelName);

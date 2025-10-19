@@ -7,15 +7,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public final class TwoDeadWheelInputsMessage {
-    public long timestamp;
-    public PositionVelocityPair par;
-    public PositionVelocityPair perp;
-    public double yaw;
-    public double pitch;
-    public double roll;
-    public double xRotationRate;
-    public double yRotationRate;
-    public double zRotationRate;
+    public final long timestamp;
+    public final PositionVelocityPair par;
+    public final PositionVelocityPair perp;
+    public final double yaw;
+    public final double pitch;
+    public final double roll;
+    public final double xRotationRate;
+    public final double yRotationRate;
+    public final double zRotationRate;
 
     public TwoDeadWheelInputsMessage(PositionVelocityPair par, PositionVelocityPair perp, YawPitchRollAngles angles, AngularVelocity angularVelocity) {
         this.timestamp = System.nanoTime();

@@ -64,39 +64,39 @@ public final class TankDrive {
         // IMU orientation
         // TODO: fill in these values based on
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
-        public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
+        public final RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
+        public final RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
         // drive model parameters
-        public double inPerTick = 0;
-        public double trackWidthTicks = 0;
+        public final double inPerTick = 0;
+        public final double trackWidthTicks = 0;
 
         // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
-        public double kA = 0;
+        public final double kS = 0;
+        public final double kV = 0;
+        public final double kA = 0;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 50;
-        public double minProfileAccel = -30;
-        public double maxProfileAccel = 50;
+        public final double maxWheelVel = 50;
+        public final double minProfileAccel = -30;
+        public final double maxProfileAccel = 50;
 
         // turn profile parameters (in radians)
-        public double maxAngVel = Math.PI; // shared with path
-        public double maxAngAccel = Math.PI;
+        public final double maxAngVel = Math.PI; // shared with path
+        public final double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double ramseteZeta = 0.7; // in the range (0, 1)
-        public double ramseteBBar = 2.0; // positive
+        public final double ramseteZeta = 0.7; // in the range (0, 1)
+        public final double ramseteBBar = 2.0; // positive
 
         // turn controller gains
-        public double turnGain = 0.0;
-        public double turnVelGain = 0.0;
+        public final double turnGain = 0.0;
+        public final double turnVelGain = 0.0;
     }
 
-    public static Params PARAMS = new Params();
+    public static final Params PARAMS = new Params();
 
     public final TankKinematics kinematics = new TankKinematics(PARAMS.inPerTick * PARAMS.trackWidthTicks);
 

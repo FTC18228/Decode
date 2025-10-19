@@ -24,11 +24,7 @@ public class VisionSubsystem extends SubsystemBase {
         OBELISK3(23);
 
 
-        private final int id;
-
-        private TagIDs(int id) {
-            this.id = id;
-        }
+        TagIDs(int id) {}
     }
 
     public int checkObeliskState() {

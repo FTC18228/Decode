@@ -20,9 +20,9 @@ public class AprilTagUtil {
     public static boolean initialized;
 
     public static class TagDistance {
-        public double range;
-        public double bearing;
-        static TagDistance invalid = new TagDistance(-1, -1);
+        public final double range;
+        public final double bearing;
+        static final TagDistance invalid = new TagDistance(-1, -1);
         public TagDistance(double range, double bearing) {
             this.range = range;
             this.bearing = bearing;
