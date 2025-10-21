@@ -4,12 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.debug.TagInfo;
-import org.firstinspires.ftc.teamcode.debug.VisionDebug;
-import org.firstinspires.ftc.teamcode.debug.VisionTurretDebug;
+import org.firstinspires.ftc.teamcode.utils.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 
 @TeleOp(name="Servo Test", group="tests")
 public class ServoTestOpMode extends LinearOpMode {

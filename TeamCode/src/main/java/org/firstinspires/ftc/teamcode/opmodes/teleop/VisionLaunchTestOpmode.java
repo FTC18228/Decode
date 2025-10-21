@@ -1,23 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.acmerobotics.roadrunner.Pose2d;
-import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.debug.TagInfo;
-import org.firstinspires.ftc.teamcode.debug.VisionDebug;
-import org.firstinspires.ftc.teamcode.debug.VisionTurretDebug;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
-import org.firstinspires.ftc.teamcode.vision.AprilTagUtil;
-
-import dalvik.system.DelegateLastClassLoader;
 
 @TeleOp(name="Vision Launch Test", group="tests")
 public class VisionLaunchTestOpmode extends LinearOpMode {

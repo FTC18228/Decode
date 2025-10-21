@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.utils.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
     // IM SCARED IM SCARED IM SCARED IM SCAREDDDDDDDDDDDDDDDDDDDDDDDD

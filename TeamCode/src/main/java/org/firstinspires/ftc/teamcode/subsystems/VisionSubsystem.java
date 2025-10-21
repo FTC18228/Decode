@@ -4,10 +4,10 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.utils.Constants;
 import org.firstinspires.ftc.teamcode.debug.TagInfo;
 import org.firstinspires.ftc.teamcode.debug.VisionDebug;
-import org.firstinspires.ftc.teamcode.vision.AprilTagUtil;
+import org.firstinspires.ftc.teamcode.utils.AprilTagUtil;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.utils;
 public class Constants {
     public static class Physics {
         // Can be changed!!!

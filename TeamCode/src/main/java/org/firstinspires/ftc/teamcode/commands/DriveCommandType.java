@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
-import org.firstinspires.ftc.teamcode.JoystickValues;
-import org.firstinspires.ftc.teamcode.Vector2DSupplier;
+import org.firstinspires.ftc.teamcode.utils.JoystickValues;
 
 import java.util.function.DoubleSupplier;
 
