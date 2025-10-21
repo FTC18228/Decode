@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 
 public class TurretDebug implements DebugInfo<String, Double>{
     Map<String, Double> values;
-    public TurretDebug(double minx, double maxx, double target) {
-        String[] keys = {"minx", "maxx", "target"};
-        Double[] vals = {minx, maxx, target};
+    public TurretDebug(double target, double targetServo, double wheelSpeed) {
+        String[] keys = {"target", "servo target", "wheel speed"};
+        Double[] vals = {target, targetServo, wheelSpeed};
         setValues(keys, vals);
     }
 

@@ -29,6 +29,10 @@ public class VisionLaunchTestOpmode extends LinearOpMode {
         DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap, new Pose2d(0, 0, 0), 10);
 
         waitForStart();
+
+        boolean aPressed = false;
+        boolean xPressed = false;
+        boolean yPressed = false;
         while(!isStopRequested()) {
             visionSubsystem.detectTags();
 
@@ -39,14 +43,26 @@ public class VisionLaunchTestOpmode extends LinearOpMode {
             telemetry.update();
 
             if(gamepad1.a) {
-                turretSubsystem.aimTurret(visionSubsystem.getDistanceToTarget() / 1000, visionSubsystem.getBearingToTarget());
+                if(!aPressed) turretSubsystem.aimTurret(visionSubsystem.getDistanceToTarget() / 1000, visionSubsystem.getBearingToTarget());
+                aPressed = true;
+            }
+            else {
+                aPressed = false;
             }
 
             if(gamepad1.x) {
-                turretSubsystem.fireTurret();
+                if(!xPressed) turretSubsystem.fireTurret();
+                xPressed = true;
+            }
+            else {
+                xPressed = false;
             }
             if(gamepad1.y) {
-                turretSubsystem.stopTurret();
+                if(!yPressed) turretSubsystem.stopTurret();
+                yPressed = true;
+            }
+            else {
+                yPressed = false;
             }
         }
     }

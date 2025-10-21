@@ -130,22 +130,22 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     public TurretDebug getTurretInfo() {
-        double q = -w * Math.cos(upper);
-        double n = 1 - (Math.pow(w, 2) * Math.pow(Math.sin(upper), 2));
-        double lhs = acosh(z / Math.sqrt(n));
-        double rhs = atanh(w * Math.sin(upper));
         return new TurretDebug(
-                minx,
-                maxx,
-                lasttarget
+                lasttarget,
+                getHoodTarget(thetaEstimate(lasttarget)),
+                wheel.getPower()
         );
     }
 
     void moveHood(double degrees) {
-        double a = 0.000000435526;
-        double b = 0.000334834;
-        double c = 0.00986936;
-        hood.setPosition(a * Math.pow(degrees, 2) + b * degrees + c);
+        hood.setPosition(getHoodTarget(degrees));
+    }
+
+    double getHoodTarget(double degrees) {
+        double a = 0.0000115643;
+        double b = -0.0231161;
+        double c = 1.57153;
+        return a * Math.pow(degrees, 2) + b * degrees + c;
     }
 
     public double hoodPosition() {
