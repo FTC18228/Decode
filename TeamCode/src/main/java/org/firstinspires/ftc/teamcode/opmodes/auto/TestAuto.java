@@ -5,7 +5,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -30,7 +29,7 @@ public class TestAuto extends CommandOpMode {
         Pose2d artifact3Pose = new Pose2d(33, 40, 90);
         Pose2d shootPose = new Pose2d(-22, 22, 45);
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-        VisionSubsystem visionSubsystem = new VisionSubsystem();
+        VisionSubsystem visionSubsystem = new VisionSubsystem(hardwareMap, false);
         TurretSubsystem turretSubsystem = new TurretSubsystem(hardwareMap);
 
         Action driveToObelisk = drive.actionBuilder(initialPose)
@@ -84,7 +83,7 @@ public class TestAuto extends CommandOpMode {
                                         new InstantCommand(() -> {}),
                                         visionSubsystem
                                 ),
-                                new TurretShootCommand(turretSubsystem, () -> {return visionSubsystem.getDistanceToTarget(false);}),
+                                new TurretShootCommand(turretSubsystem, visionSubsystem),
                                 new ActionCommand(driveTohome)
                         )
                 )
