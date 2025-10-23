@@ -13,10 +13,10 @@ import org.firstinspires.ftc.teamcode.debug.TurretDebug;
 public class TurretSubsystem extends SubsystemBase {
     DcMotor wheel;
     Servo hood;
-    MotorEx spinner;
+    public MotorEx spinner;
     double servoRange = 220;
 
-    double degreeCounts;
+    public double motorDegreesToReal;
     double o = Constants.Physics.mass / Constants.Physics.xCoefficient;
     double w = Constants.Physics.speed / Constants.Physics.terminalVelocity;
     double z = Math.exp(-(Constants.Physics.gravity * Constants.Physics.targetYPosition / Math.pow(Constants.Physics.terminalVelocity, 2)));
@@ -27,10 +27,13 @@ public class TurretSubsystem extends SubsystemBase {
     double lasttarget;
 
     public TurretSubsystem(HardwareMap hardwareMap) {
-        this.wheel = hardwareMap.get(DcMotor.class, Constants.Hardware.turretWheelName);
+        this. wheel = hardwareMap.get(DcMotor.class, Constants.Hardware.turretWheelName);
         this.hood = hardwareMap.get(Servo.class, Constants.Hardware.turretHoodName);
         this.spinner = new MotorEx(hardwareMap, Constants.Hardware.turretSpinnerName, Motor.GoBILDA.BARE);
-        degreeCounts = this.spinner.getCPR() / 360;
+        this.spinner.setRunMode(Motor.RunMode.PositionControl);
+        this.spinner.setPositionTolerance(13.6);
+        this.spinner.encoder.reset();
+        motorDegreesToReal = (double)1891 / 180;
 
         if(0.9999999999999 / w < 1) upper = Math.asin(0.9999999999999 / w);
         else upper = Math.toRadians(89.9);
@@ -59,10 +62,6 @@ public class TurretSubsystem extends SubsystemBase {
         return 0.5 * Math.log((1 + x) / (1 - x));
     }
     double acosh(double x) {return Math.log(x + Math.sqrt(Math.pow(x, 2) - 1));}
-    double getTMeasure(double a) {
-        double decider = Math.exp(-Constants.Physics.gravity * Constants.Physics.targetYPosition / Math.pow(Constants.Physics.terminalVelocity, 2));
-        return (acosh(decider * Math.cosh(a)) - a) / -Constants.Physics.yCoefficient;
-    }
     //TODO: Fix up so it works :3
     public double thetaEstimate(double target) {
         lasttarget = target;
@@ -110,7 +109,7 @@ public class TurretSubsystem extends SubsystemBase {
         double theta = thetaEstimate(target);
         if(theta == -1) return false;
         moveHood(theta);
-        //spinner.setTargetPosition((int) Math.round(bearing * degreeCounts));
+        spinner.setTargetPosition((int) Math.round(bearing * motorDegreesToReal));
         return true; //TODO: Return some value to ensure its aimed and the target is reachable
     }
 
