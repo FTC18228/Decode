@@ -34,6 +34,7 @@ public class TurretSubsystem extends SubsystemBase {
         this.spinner.setPositionTolerance(13.6);
         this.spinner.encoder.reset();
         motorDegreesToReal = (double)1891 / 180;
+        hood.setDirection(Servo.Direction.REVERSE);
 
         if(0.9999999999999 / w < 1) upper = Math.asin(0.9999999999999 / w);
         else upper = Math.toRadians(89.9);

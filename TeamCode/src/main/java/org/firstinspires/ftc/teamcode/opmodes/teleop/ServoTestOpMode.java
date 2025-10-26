@@ -30,17 +30,14 @@ public class ServoTestOpMode extends LinearOpMode {
             visionSubsystem.detectTags();
 
             double visionDistance = visionSubsystem.getDistanceToTarget();
-            if(visionSubsystem.isInvalidDistance(visionDistance)) {
-                count = 0;
-                totalTheta = 0;
-                totalDistance = 0;
-                telemetry.addData("Average theta: ", -1);
-                telemetry.addData("Average distance: ", -1);
-            }
-            else {
+            if(!visionSubsystem.isInvalidDistance(visionDistance)) {
                 count++;
                 totalDistance += visionDistance;
                 totalTheta += turretSubsystem.thetaEstimate(visionDistance / 1000);
+                telemetry.addData("Average theta: ", totalTheta / count);
+                telemetry.addData("Average distance: ", totalDistance / count);
+            }
+            else {
                 telemetry.addData("Average theta: ", totalTheta / count);
                 telemetry.addData("Average distance: ", totalDistance / count);
             }
