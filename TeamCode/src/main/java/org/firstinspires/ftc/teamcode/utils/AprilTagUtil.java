@@ -53,7 +53,7 @@ public class AprilTagUtil {
         visionBuilder.enableLiveView(true);
         visionPortal = visionBuilder.build();
 
-        //visionPortal.setProcessorEnabled(aprilTagProcessor, true);
+        visionPortal.setProcessorEnabled(aprilTagProcessor, true);
 
         initialized = true;
     }
