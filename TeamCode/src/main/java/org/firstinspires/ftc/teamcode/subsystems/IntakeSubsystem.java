@@ -27,21 +27,22 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor = hardwareMap.get(DcMotor.class, Constants.Hardware.intakeMotorName);
         loadingMotor = hardwareMap.get(DcMotor.class, Constants.Hardware.intakeLoaderName);
         gate = hardwareMap.get(Servo.class, Constants.Hardware.intakeGateName);
-        sensor = hardwareMap.get(OpticalDistanceSensor.class, Constants.Hardware.intakeSensorName);
+        //sensor = hardwareMap.get(OpticalDistanceSensor.class, Constants.Hardware.intakeSensorName);
         motorTimer = new ElapsedTime();
 
     }
 
     public void intakeOn() {
-        intakeMotor.setPower(1);
+        intakeMotor.setPower(-1);
     }
     public void intakeOff() {
         intakeMotor.setPower(0);
     }
 
     public void outtake() {
-        intakeMotor.setPower(-1);
+        intakeMotor.setPower(1);
     }
+
     public IntakeDebug getDebug() {
         double light = sensor.getLightDetected();
         return new IntakeDebug(
@@ -67,5 +68,22 @@ public class IntakeSubsystem extends SubsystemBase {
         kickReady = true;
     }
 
+    public void visionlessInit() {
+        loadingMotor.setPower(-1);
+    }
+
+    public void visionlessOpenGate() {
+        kickReady = false;
+        gate.setPosition(1);
+    }
+
+    public void visionlessCloseGate() {
+        gate.setPosition(0);
+        motorTimer.reset();
+        while(motorTimer.milliseconds() < 1000);
+        kickReady = true;
+    }
+
     public boolean isKickReady() {return kickReady;}
+    public boolean isIntakeOn() {return intakeMotor.getPower() != 0;}
 }

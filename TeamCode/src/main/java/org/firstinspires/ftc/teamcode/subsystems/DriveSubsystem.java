@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -12,9 +13,11 @@ import org.firstinspires.ftc.teamcode.debug.DriveDebug;
 public class DriveSubsystem extends SubsystemBase {
     MecanumDrive drive;
     double speed;
+    Pose2d defaultPose;
     public DriveSubsystem(HardwareMap hardwareMap, Pose2d defaultPose, double speed) {
         this.drive = new MecanumDrive(hardwareMap, defaultPose);
         this.speed = speed;
+        this.defaultPose = defaultPose;
     }
 
     double rotationOf(double x, double y) {
@@ -53,5 +56,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void changeSpeed(double newSpeed) {
         speed = newSpeed;
+    }
+    public void resetState() {
+        this.drive.localizer.setPose(defaultPose);
     }
 }
