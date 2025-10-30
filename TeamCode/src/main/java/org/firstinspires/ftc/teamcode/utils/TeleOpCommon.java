@@ -44,6 +44,10 @@ public class TeleOpCommon {
         return instance;
     }
 
+    public static synchronized void hardResetInstance() {
+        instance = null;
+    }
+
     public void resetInstanceState() {
         driveSubsystem.resetState();
         driverGamepad.gamepad.reset();
@@ -93,6 +97,22 @@ public class TeleOpCommon {
         this.driverGamepad.getGamepadButton(GamepadKeys.Button.START)
                 .whenPressed(
                     new InstantCommand(() -> {this.resetInstanceState();})
+                );
+
+        this.driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(
+                    new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();})
+                )
+                .whenReleased (
+                    new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();})
+                );
+
+        this.driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(
+                        new InstantCommand(() -> {turretSubsystem.reverseTurret();})
+                )
+                .whenReleased (
+                        new InstantCommand(() -> {turretSubsystem.stopTurret();})
                 );
     }
 }

@@ -27,7 +27,7 @@ public class TurretSubsystem extends SubsystemBase {
     double lasttarget;
 
     public TurretSubsystem(HardwareMap hardwareMap) {
-        this. wheel = hardwareMap.get(DcMotor.class, Constants.Hardware.turretWheelName);
+        this.wheel = hardwareMap.get(DcMotor.class, Constants.Hardware.turretWheelName);
         this.hood = hardwareMap.get(Servo.class, Constants.Hardware.turretHoodName);
         this.spinner = new MotorEx(hardwareMap, Constants.Hardware.turretSpinnerName, Motor.GoBILDA.BARE);
         this.spinner.setRunMode(Motor.RunMode.PositionControl);
@@ -120,6 +120,10 @@ public class TurretSubsystem extends SubsystemBase {
 
     public void stopTurret() {
         wheel.setPower(0);
+    }
+
+    public void reverseTurret() {
+        wheel.setPower(-1);
     }
 
     public boolean isTurretMoving() {

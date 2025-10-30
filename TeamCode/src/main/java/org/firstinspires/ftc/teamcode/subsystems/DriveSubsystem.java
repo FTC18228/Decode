@@ -18,6 +18,7 @@ public class DriveSubsystem extends SubsystemBase {
         this.drive = new MecanumDrive(hardwareMap, defaultPose);
         this.speed = speed;
         this.defaultPose = defaultPose;
+        this.resetState();
     }
 
     double rotationOf(double x, double y) {
@@ -33,7 +34,7 @@ public class DriveSubsystem extends SubsystemBase {
                 -(leftY * Math.cos(-rotation) + leftX * Math.sin(-rotation)),
                 -(leftY * Math.sin(-rotation) - leftX * Math.cos(-rotation))
         );
-        drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), -rightX));
+        drive.setDrivePowers(new PoseVelocity2d(velocity.times(speed), -speed * rightX));
         drive.updatePoseEstimate();
         return new DriveDebug(velocity.x, velocity.y, -rotation, drive.localizer.getPose().position.x, drive.localizer.getPose().position.y);
     }

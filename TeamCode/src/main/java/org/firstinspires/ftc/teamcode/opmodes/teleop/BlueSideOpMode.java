@@ -18,9 +18,10 @@ import org.firstinspires.ftc.teamcode.utils.TeleOpCommon;
 public class BlueSideOpMode extends CommandOpMode {
     @Override
     public void initialize() {
+        TeleOpCommon.hardResetInstance();
         TeleOpCommon common = TeleOpCommon.getInstance(hardwareMap, new Pose2d(0, 0, 0), gamepad1, telemetry);
         common.resetInstanceState(); //Ensure its reset - sometimes the instance is preserved between running the the init function
-
-        common.intakeSubsystem.visionlessInit();
     }
+
+
 }

@@ -16,11 +16,11 @@ public class SpinnerTestOpMode extends LinearOpMode {
         while(!isStopRequested()) {
             if(gamepad1.aWasPressed() && bearing < 180) {
                 bearing++;
-                turretSubsystem.spinner.setTargetPosition((int) Math.round(bearing * turretSubsystem.spinner.getCPR() * turretSubsystem.motorDegreesToReal));
+                turretSubsystem.spinner.setTargetPosition((int) Math.round(bearing * turretSubsystem.motorDegreesToReal));
             }
             if(gamepad1.bWasPressed() && bearing > 0) {
                 bearing--;
-                turretSubsystem.spinner.setTargetPosition((int) Math.round(bearing * turretSubsystem.spinner.getCPR() * turretSubsystem.motorDegreesToReal));
+                turretSubsystem.spinner.setTargetPosition((int) Math.round(bearing * turretSubsystem.motorDegreesToReal));
             }
 
             if(!turretSubsystem.spinner.atTargetPosition() && gamepad1.x) {

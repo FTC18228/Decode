@@ -68,10 +68,6 @@ public class IntakeSubsystem extends SubsystemBase {
         kickReady = true;
     }
 
-    public void visionlessInit() {
-        loadingMotor.setPower(-1);
-    }
-
     public void visionlessOpenGate() {
         kickReady = false;
         gate.setPosition(1);
@@ -82,6 +78,14 @@ public class IntakeSubsystem extends SubsystemBase {
         motorTimer.reset();
         while(motorTimer.milliseconds() < 1000);
         kickReady = true;
+    }
+
+    public void visionlessStartWheel() {
+        loadingMotor.setPower(-1);
+    }
+
+    public void visionlessStopWheel() {
+        loadingMotor.setPower(0);
     }
 
     public boolean isKickReady() {return kickReady;}
