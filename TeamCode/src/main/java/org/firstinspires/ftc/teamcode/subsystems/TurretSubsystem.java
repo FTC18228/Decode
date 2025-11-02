@@ -13,143 +13,30 @@ import org.firstinspires.ftc.teamcode.debug.TurretDebug;
 public class TurretSubsystem extends SubsystemBase {
     DcMotor wheel;
     Servo hood;
-    public MotorEx spinner;
-    double servoRange = 220;
-
-    public double motorDegreesToReal;
-    double o = Constants.Physics.mass / Constants.Physics.xCoefficient;
-    double w = Constants.Physics.speed / Constants.Physics.terminalVelocity;
-    double z = Math.exp(-(Constants.Physics.gravity * Constants.Physics.targetYPosition / Math.pow(Constants.Physics.terminalVelocity, 2)));
-    double lower = Math.asin(Math.sqrt((Math.pow(z, 2) - 1) / -Math.pow(w, 2)));
-    double upper;
-    double maxx = xPosition(lower);
-    double minx;
-    double lasttarget;
 
     public TurretSubsystem(HardwareMap hardwareMap) {
-        this. wheel = hardwareMap.get(DcMotor.class, Constants.Hardware.turretWheelName);
-        this.hood = hardwareMap.get(Servo.class, Constants.Hardware.turretHoodName);
-        this.spinner = new MotorEx(hardwareMap, Constants.Hardware.turretSpinnerName, Motor.GoBILDA.BARE);
-        this.spinner.setRunMode(Motor.RunMode.PositionControl);
-        this.spinner.setPositionTolerance(13.6);
-        this.spinner.encoder.reset();
-        motorDegreesToReal = (double)1891 / 180;
-        hood.setDirection(Servo.Direction.REVERSE);
-
-        if(0.9999999999999 / w < 1) upper = Math.asin(0.9999999999999 / w);
-        else upper = Math.toRadians(89.9);
-        minx = xPosition(upper);
+        wheel = hardwareMap.get(DcMotor.class, Constants.Hardware.turretWheelName);
+        hood = hardwareMap.get(Servo.class, Constants.Hardware.turretHoodName);
     }
 
-    double xPosition(double t) {
-        double q = -w * Math.cos(t);
-        double n = 1 - (Math.pow(w, 2) * Math.pow(Math.sin(t), 2));
-        double lhs = acosh(z / Math.sqrt(n));
-        double rhs = atanh(w * Math.sin(t));
-        return o * Math.log1p(q * (lhs - rhs));
-    }
-    double xPositionDTheta(double t) {
-        double q = -w * Math.cos(t);
-        double n = 1 - (Math.pow(w, 2) * Math.pow(Math.sin(t), 2));
-        double nlhs = (o * z * Math.pow(w, 2) * Math.sin(2 * t)) / (2 * n * Math.sqrt(Math.pow(z, 2) - n));
-        double nrhs = w * o * Math.cos(t) / (-n);
-        double dlhs = acosh(z / Math.sqrt(n));
-        double drhs = atanh(w * Math.sin(t));
-        return (nlhs + nrhs) / (dlhs - drhs + (1 / q));
-    }
-
-    /** @noinspection SpellCheckingInspection*/
-    double atanh(double x) {
-        return 0.5 * Math.log((1 + x) / (1 - x));
-    }
-    double acosh(double x) {return Math.log(x + Math.sqrt(Math.pow(x, 2) - 1));}
-    //TODO: Fix up so it works :3
-    public double thetaEstimate(double target) {
-        lasttarget = target;
-        if(minx > target || maxx < target) return -1;
-
-        double v = Constants.Physics.speed * Math.sin(Constants.Physics.theta0);
-        double a;
-        if(v > Constants.Physics.terminalVelocity) a = atanh((Constants.Physics.terminalVelocity - 0.001) / Constants.Physics.terminalVelocity);
-        else a = atanh(v / Constants.Physics.terminalVelocity);
-        double xGuess = xPosition(Constants.Physics.theta0);
-        double thetaGuess = Constants.Physics.theta0;
-        double thetanm1 = -1;
-        double thetanm2 = -1;
-        int cons = 0;
-        double delta = xGuess - target;
-
-        while(Math.abs(delta) > Constants.Physics.toleranceThreshold) {
-            thetanm2 = thetanm1;
-            thetanm1 = thetaGuess;
-            delta = xGuess - target;
-            double alpha = 1;
-            double oldGuess = thetaGuess;
-            thetaGuess = oldGuess - (delta / xPositionDTheta(oldGuess));
-            while(!(lower < thetaGuess) || !(upper > thetaGuess)) {
-                alpha /= 2;
-                thetaGuess = oldGuess - alpha * (delta / xPositionDTheta(oldGuess));
-            }
-            if(thetaGuess - thetanm2 > 0.000001) cons += 1;
-            if(cons == 2) {
-                alpha /= 2;
-                thetaGuess = oldGuess - alpha * (delta / xPositionDTheta(oldGuess));
-                cons = 0;
-            }
-
-            v = Constants.Physics.speed * Math.sin(Constants.Physics.theta0);
-            if(v > Constants.Physics.terminalVelocity) a = atanh((Constants.Physics.terminalVelocity - 0.001) / Constants.Physics.terminalVelocity);
-            else a = atanh(v / Constants.Physics.terminalVelocity);
-            xGuess = xPosition(thetaGuess);
-        }
-
-        return Math.toDegrees(thetaGuess);
-    }
-
-    public boolean aimTurret(double target, double bearing) {
-        double theta = thetaEstimate(target);
-        if(theta == -1) return false;
-        moveHood(theta);
-        spinner.setTargetPosition((int) Math.round(bearing * motorDegreesToReal));
-        return true; //TODO: Return some value to ensure its aimed and the target is reachable
-    }
-
-    public void fireTurret() {
-        wheel.setPower(1);
+    public void setPreset(double servoPosition, double speed) {
+        this.hood.setPosition(servoPosition);
+        this.wheel.setPower(speed);
     }
 
     public void stopTurret() {
         wheel.setPower(0);
     }
 
+    public void reverseTurret() {
+        wheel.setPower(-0.2);
+    }
+
     public boolean isTurretMoving() {
         return wheel.getPower() != 0;
     }
 
-    public TurretDebug getTurretInfo() {
-        return new TurretDebug(
-                lasttarget,
-                getHoodTarget(thetaEstimate(lasttarget)),
-                wheel.getPower()
-        );
-    }
-
-    void moveHood(double degrees) {
-        hood.setPosition(getHoodTarget(degrees));
-    }
-
-    double getHoodTarget(double degrees) {
-        double a = 0.0000115643;
-        double b = -0.0231161;
-        double c = 1.57153;
-        return a * Math.pow(degrees, 2) + b * degrees + c;
-    }
-
     public double hoodPosition() {
         return hood.getPosition();
-    }
-
-    public double hoodDegrees() {
-        return hoodPosition() * servoRange;
     }
 }

@@ -11,7 +11,12 @@ public class IntakeOffCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
+    public void execute() {
         intakeSubsystem.intakeOff();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return !intakeSubsystem.isIntakeOn();
     }
 }

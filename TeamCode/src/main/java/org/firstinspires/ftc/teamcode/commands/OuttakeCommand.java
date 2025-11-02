@@ -11,7 +11,12 @@ public class OuttakeCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
+    public void execute() {
         intakeSubsystem.outtake();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return intakeSubsystem.isIntakeOn();
     }
 }

@@ -15,12 +15,11 @@ public class IntakeKickCommand extends CommandBase {
     @Override
     public void execute() {
         intakeSubsystem.loadArtefact();
-        while(!intakeSubsystem.isKickReady());
         finished = true;
     }
 
     @Override
     public boolean isFinished() {
-        return finished;
+        return intakeSubsystem.isKickReady();
     }
 }
