@@ -31,7 +31,7 @@ public class Constants {
 
     public static class Hardware {
         public static String turretWheelName = "launch";
-        public static String turretSpinnerName = "spinner";
+        //public static String turretSpinnerName = "spinner";
         public static String turretHoodName = "hood";
         public static double turretDistanceFromCamera = 0;
         public static double turretSpinnerRadius = 167.0 / 2;
@@ -39,6 +39,48 @@ public class Constants {
         public static String intakeMotorName = "intake";
         public static String intakeLoaderName = "loader";
         public static String intakeGateName = "gate";
-        public static String intakeSensorName = "sensor";
+        public static String intakeSensor1Name = "sensor1";
+        public static String intakeSensor2Name = "sensor2";
+    }
+    
+    public static class TurretPresets {
+        static double hoodPose0 = 0;
+        static double hoodPose1 = 0;
+        static double hoodPose2 = 0;
+        static double hoodPose3 = 0;
+        static double wheelSpeed0 = 0;
+        static double wheelSpeed1 = 0;
+        static double wheelSpeed2 = 0;
+        static double wheelSpeed3 = 0;
+        
+        public static double getHoodPose(int index) {
+            switch (index) {
+                case 0:
+                    return hoodPose0;
+                case 1:
+                    return hoodPose1;
+                case 2:
+                    return hoodPose2;
+                case 3:
+                    return hoodPose3;
+                default:
+                    return 0;
+            }
+        }
+
+        public static double getWheelSpeed(int index) {
+            switch (index) {
+                case 0:
+                    return wheelSpeed0;
+                case 1:
+                    return wheelSpeed1;
+                case 2:
+                    return wheelSpeed2;
+                case 3:
+                    return wheelSpeed3;
+                default:
+                    return 0;
+            }
+        }
     }
 }

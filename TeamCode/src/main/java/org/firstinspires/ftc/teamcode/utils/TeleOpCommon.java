@@ -13,6 +13,11 @@ import org.firstinspires.ftc.teamcode.commands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.commands.IntakeOffCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeOnCommand;
 import org.firstinspires.ftc.teamcode.commands.OuttakeCommand;
+import org.firstinspires.ftc.teamcode.commands.TurretPose0Command;
+import org.firstinspires.ftc.teamcode.commands.TurretPose1Command;
+import org.firstinspires.ftc.teamcode.commands.TurretPose2Command;
+import org.firstinspires.ftc.teamcode.commands.TurretPose3Command;
+import org.firstinspires.ftc.teamcode.commands.TurretStopCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
@@ -25,7 +30,7 @@ public class TeleOpCommon {
     public GamepadEx driverGamepad;
     Telemetry telemetry;
     private TeleOpCommon(HardwareMap hardwareMap, Pose2d defaultPose, Gamepad gamepad1, Telemetry telemetry) {
-        intakeSubsystem = new IntakeSubsystem(hardwareMap);
+        intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
         driveSubsystem = new DriveSubsystem(hardwareMap, defaultPose, 10);
         turretSubsystem = new TurretSubsystem(hardwareMap);
         driverGamepad = new GamepadEx(gamepad1);
@@ -76,22 +81,12 @@ public class TeleOpCommon {
                         new IntakeOffCommand(this.intakeSubsystem)
                 );
 
-        this.driverGamepad.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(
-                        new InstantCommand(() -> {this.intakeSubsystem.visionlessOpenGate();})
-                );
-
-        this.driverGamepad.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(
-                        new InstantCommand(() -> {this.intakeSubsystem.visionlessCloseGate();})
-                );
-
         new Trigger(() -> {return this.driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) >= 0.5;})
                 .whenActive(
-                        new InstantCommand(() -> {this.turretSubsystem.fireTurret();})
+                        new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();})
                 )
                 .whenInactive(
-                        new InstantCommand(() -> {this.turretSubsystem.stopTurret();})
+                        new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();})
                 );
 
         this.driverGamepad.getGamepadButton(GamepadKeys.Button.START)
@@ -101,18 +96,32 @@ public class TeleOpCommon {
 
         this.driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(
-                    new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();})
+                    new TurretPose0Command(this.turretSubsystem)
                 )
                 .whenReleased (
-                    new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();})
+                    new TurretStopCommand(this.turretSubsystem)
                 );
 
-        this.driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+        this.driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(
-                        new InstantCommand(() -> {turretSubsystem.reverseTurret();})
+                        new TurretPose1Command(this.turretSubsystem)
                 )
                 .whenReleased (
-                        new InstantCommand(() -> {turretSubsystem.stopTurret();})
+                        new TurretStopCommand(this.turretSubsystem)
+                );
+        this.driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(
+                        new TurretPose2Command(this.turretSubsystem)
+                )
+                .whenReleased (
+                        new TurretStopCommand(this.turretSubsystem)
+                );
+        this.driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(
+                        new TurretPose3Command(this.turretSubsystem)
+                )
+                .whenReleased (
+                        new TurretStopCommand(this.turretSubsystem)
                 );
     }
 }
