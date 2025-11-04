@@ -1,4 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils;
+
+import com.bylazar.configurables.annotations.Configurable;
+
 public class Constants {
     public static class Physics {
         // Can be changed!!!
@@ -41,8 +44,10 @@ public class Constants {
         public static String intakeGateName = "gate";
         public static String intakeSensor1Name = "sensor1";
         public static String intakeSensor2Name = "sensor2";
+        public static String headlightName = "headlight";
     }
-    
+
+    @Configurable
     public static class TurretPresets {
         static double hoodPose0 = 0;
         static double hoodPose1 = 0;

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.utils.TeleOpCommon;
 
-@TeleOp(name="Blue side OpMode")
+@TeleOp(name="Solo OpMode")
 public class SoloOpMode extends CommandOpMode {
     @Override
     public void initialize() {

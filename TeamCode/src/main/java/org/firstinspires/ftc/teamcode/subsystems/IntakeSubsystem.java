@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.bylazar.lights.Headlight;
+import com.bylazar.lights.LightsManager;
+import com.bylazar.lights.PanelsLights;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -17,12 +21,15 @@ public class IntakeSubsystem extends SubsystemBase {
     DcMotor loadingMotor;
     Servo gate;
 
+    CRServo intakeServo;
+
     RevColorSensorV3 sensor1;
     RevColorSensorV3 sensor2;
     ElapsedTime motorTimer;
     ElapsedTime sensorTimer;
     boolean kickReady;
-
+    Headlight headlight;
+    LightsManager lightsManager;
     Telemetry telemetry;
     public IntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         intakeMotor = hardwareMap.get(DcMotor.class, Constants.Hardware.intakeMotorName);
@@ -30,20 +37,29 @@ public class IntakeSubsystem extends SubsystemBase {
         gate = hardwareMap.get(Servo.class, Constants.Hardware.intakeGateName);
         sensor1 = hardwareMap.get(RevColorSensorV3.class, Constants.Hardware.intakeSensor1Name);
         sensor2 = hardwareMap.get(RevColorSensorV3.class, Constants.Hardware.intakeSensor2Name);
+        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
         motorTimer = new ElapsedTime();
         sensorTimer = new ElapsedTime();
+        headlight = new Headlight(Constants.Hardware.headlightName);
+        lightsManager = PanelsLights.INSTANCE.getLights();
+        lightsManager.initLights(headlight);
         this.telemetry = telemetry;
     }
 
     public void intakeOn() {
-        intakeMotor.setPower(-1);
+
+        intakeServo.setPower(1);
+        intakeMotor.setPower(1);
     }
     public void intakeOff() {
+
+        intakeServo.setPower(0);
         intakeMotor.setPower(0);
     }
 
     public void outtake() {
-        intakeMotor.setPower(1);
+
+        intakeMotor.setPower(-1);
     }
 
     public void loadArtefact() {
@@ -106,12 +122,15 @@ public class IntakeSubsystem extends SubsystemBase {
         if(sensorTimer.milliseconds() > 250) {
             if (isGateActive()) {
                 closeGate();
+                headlight.update(true);
             } else {
                 openGate();
+                headlight.update(false);
             }
-            telemetry.addData("S1", sensor1.getDistance(DistanceUnit.MM));
-            telemetry.addData("S2", sensor2.getDistance(DistanceUnit.MM));
-            telemetry.update();
+            lightsManager.update();
+           // telemetry.addData("S1", sensor1.getDistance(DistanceUnit.MM));
+            //telemetry.addData("S2", sensor2.getDistance(DistanceUnit.MM));
+            //telemetry.update();
             sensorTimer.reset();
         }
     }
