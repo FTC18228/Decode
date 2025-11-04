@@ -112,7 +112,7 @@ public class TeleOpCommon {
 
         this.driverGamepad.getGamepadButton(GamepadKeys.Button.START)
                 .whenPressed(
-                    new InstantCommand(() -> {this.resetInstanceState();})
+                    new InstantCommand(() -> {driveSubsystem.resetState();})
                 );
 
         this.driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP)

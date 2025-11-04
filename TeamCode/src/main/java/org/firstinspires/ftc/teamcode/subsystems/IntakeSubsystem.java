@@ -28,8 +28,7 @@ public class IntakeSubsystem extends SubsystemBase {
     ElapsedTime motorTimer;
     ElapsedTime sensorTimer;
     boolean kickReady;
-    Headlight headlight;
-    LightsManager lightsManager;
+    Servo headlight;
     Telemetry telemetry;
     public IntakeSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         intakeMotor = hardwareMap.get(DcMotor.class, Constants.Hardware.intakeMotorName);
@@ -40,9 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
         motorTimer = new ElapsedTime();
         sensorTimer = new ElapsedTime();
-        headlight = new Headlight(Constants.Hardware.headlightName);
-        lightsManager = PanelsLights.INSTANCE.getLights();
-        lightsManager.initLights(headlight);
+        headlight = hardwareMap.get(Servo.class, "headlight");
         this.telemetry = telemetry;
     }
 
@@ -122,12 +119,11 @@ public class IntakeSubsystem extends SubsystemBase {
         if(sensorTimer.milliseconds() > 250) {
             if (isGateActive()) {
                 closeGate();
-                headlight.update(true);
+                headlight.setPosition(1);
             } else {
                 openGate();
-                headlight.update(false);
+                headlight.setPosition(0);
             }
-            lightsManager.update();
            // telemetry.addData("S1", sensor1.getDistance(DistanceUnit.MM));
             //telemetry.addData("S2", sensor2.getDistance(DistanceUnit.MM));
             //telemetry.update();
