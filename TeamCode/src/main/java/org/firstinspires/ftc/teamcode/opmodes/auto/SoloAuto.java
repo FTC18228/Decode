@@ -1,33 +1,24 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.ActionCommand;
-import org.firstinspires.ftc.teamcode.commands.IntakeKickCommand;
-import org.firstinspires.ftc.teamcode.commands.IntakeOffCommand;
-import org.firstinspires.ftc.teamcode.commands.IntakeOnCommand;
-import org.firstinspires.ftc.teamcode.commands.TurretPose3Command;
-import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
-import org.firstinspires.ftc.teamcode.utils.TeleOpCommon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Blue side auto")
-public class BlueAuto extends CommandOpMode {
-    private static final Logger log = LoggerFactory.getLogger(BlueAuto.class);
+@Autonomous(name="Solo auto")
+public class SoloAuto extends CommandOpMode {
+    private static final Logger log = LoggerFactory.getLogger(SoloAuto.class);
 
     public void backwardsSet(MecanumDrive drive) {
         double speed = -0.4;
@@ -41,6 +32,14 @@ public class BlueAuto extends CommandOpMode {
         drive.rightFront.setPower(0);
         drive.leftBack.setPower(0);
         drive.rightBack.setPower(0);
+    }
+
+    public void rturn(MecanumDrive drive) {
+        double speed = 0.6;
+        drive.leftFront.setPower(speed);
+        drive.leftBack.setPower(speed);
+        drive.rightFront.setPower(-speed);
+        drive.rightBack.setPower(-speed);
     }
 
     @Override
@@ -86,7 +85,20 @@ public class BlueAuto extends CommandOpMode {
                                 new WaitCommand(750),
                                 new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();}),
                                 new WaitCommand(1000),
-                                new InstantCommand(() -> {intakeSubsystem.intakeOff();})
+                                new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();}),
+                                new WaitCommand(750),
+                                new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();}),
+                                new WaitCommand(1000),
+                                new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();}),
+                                new WaitCommand(750),
+                                new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();}),
+                                new WaitCommand(1000),
+                                new InstantCommand(() -> {intakeSubsystem.intakeOff();}),
+                                new InstantCommand(() -> {rturn(drive);}),
+                                new WaitCommand(750),
+                                new InstantCommand(() -> {backwardsSet(drive);}),
+                                new WaitCommand(1000),
+                                new InstantCommand(() -> {zeroSet(drive);})
                         )
                 )
         );
