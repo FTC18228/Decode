@@ -49,14 +49,14 @@ public class Constants {
 
     @Configurable
     public static class TurretPresets {
-        static double hoodPose0 = 0;
-        static double hoodPose1 = 0;
-        static double hoodPose2 = 0;
-        static double hoodPose3 = 0;
-        static double wheelSpeed0 = 0;
-        static double wheelSpeed1 = 0;
-        static double wheelSpeed2 = 0;
-        static double wheelSpeed3 = 0;
+        static double hoodPose0 = .65;
+        static double hoodPose1 = .65;
+        static double hoodPose2 = .65;
+        static double hoodPose3 = .65;
+        static double wheelSpeed0 = 1;
+        static double wheelSpeed1 = .92;
+        static double wheelSpeed2 = .85;
+        static double wheelSpeed3 = .75;
         
         public static double getHoodPose(int index) {
             switch (index) {

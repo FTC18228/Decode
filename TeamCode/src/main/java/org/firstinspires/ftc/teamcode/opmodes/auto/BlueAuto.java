@@ -1,0 +1,95 @@
+package org.firstinspires.ftc.teamcode.opmodes.auto;
+
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.commands.ActionCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeKickCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeOffCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeOnCommand;
+import org.firstinspires.ftc.teamcode.commands.TurretPose3Command;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
+import org.firstinspires.ftc.teamcode.utils.TeleOpCommon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
+
+@Autonomous(name="Blue side auto")
+public class BlueAuto extends CommandOpMode {
+    private static final Logger log = LoggerFactory.getLogger(BlueAuto.class);
+
+    public void backwardsSet(MecanumDrive drive) {
+        double speed = -0.4;
+        drive.leftFront.setPower(speed);
+        drive.rightFront.setPower(speed);
+        drive.leftBack.setPower(speed);
+        drive.rightBack.setPower(speed);
+    }
+    public void zeroSet(MecanumDrive drive) {
+        drive.leftFront.setPower(0);
+        drive.rightFront.setPower(0);
+        drive.leftBack.setPower(0);
+        drive.rightBack.setPower(0);
+    }
+
+    @Override
+    public void initialize() {
+        Pose2d initialPose = new Pose2d(62, 0, Math.toRadians(180));
+        Pose2d shootPose = new Pose2d(70, 0, Math.toRadians(180));
+        Pose2d boxPose = new Pose2d(38, 32, Math.toRadians(180));
+
+        MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
+        TurretSubsystem turretSubsystem = new TurretSubsystem(hardwareMap);
+        IntakeSubsystem intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
+
+        turretSubsystem.setPreset(1, 0);
+
+        TrajectoryActionBuilder shootActionBuilder = drive.actionBuilder(initialPose)
+                .setTangent(Math.toRadians(180))
+                .splineToLinearHeading(shootPose, Math.toRadians(180))
+                .endTrajectory();
+
+        TrajectoryActionBuilder boxActionBuilder = shootActionBuilder.fresh()
+                .setTangent(Math.toRadians(-45))
+                .splineToLinearHeading(boxPose, Math.toRadians(180))
+                .endTrajectory();
+
+        CommandScheduler.getInstance().schedule(
+                new WaitUntilCommand(this::isStarted).andThen(
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> {intakeSubsystem.intakeOn();}),
+                                new InstantCommand(() -> {backwardsSet(drive);}),
+                                new WaitCommand(1500),
+                                new InstantCommand(() -> {zeroSet(drive);}),
+                                new InstantCommand(() -> {turretSubsystem.setPreset(0.75, .75);}),
+                                new WaitCommand(2000),
+                                new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();}),
+                                new WaitCommand(750),
+                                new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();}),
+                                new WaitCommand(1000),
+                                new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();}),
+                                new WaitCommand(750),
+                                new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();}),
+                                new WaitCommand(1000),
+                                new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();}),
+                                new WaitCommand(750),
+                                new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();}),
+                                new WaitCommand(1000),
+                                new InstantCommand(() -> {intakeSubsystem.intakeOff();})
+                        )
+                )
+        );
+    }
+
+}

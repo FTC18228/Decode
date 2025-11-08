@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.debug.DriveDebug;
 
 public class DriveSubsystem extends SubsystemBase {
-    MecanumDrive drive;
+    public MecanumDrive drive;
     double speed;
     Pose2d defaultPose;
     public DriveSubsystem(HardwareMap hardwareMap, Pose2d defaultPose, double speed) {

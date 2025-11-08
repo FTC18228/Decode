@@ -44,12 +44,10 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void intakeOn() {
-
         intakeServo.setPower(1);
         intakeMotor.setPower(1);
     }
     public void intakeOff() {
-
         intakeServo.setPower(0);
         intakeMotor.setPower(0);
     }
@@ -86,25 +84,12 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void closeGate(){
-        gate.setPosition(1.0);
+        gate.setPosition(0.5);
     }
 
     public void openGate(){
-        gate.setPosition(0.0);
+        gate.setPosition(0.2);
     }
-
-    /*public Command IntakeArtifact(){
-        return new SequentialCommandGroup(
-
-                new ConditionalCommand(
-                        new InstantCommand(() -> openGate()),
-                        new InstantCommand(() -> closeGate()),
-                        this::isGateActive
-                ),
-                new InstantCommand(() -> intakeOn())
-
-        );
-    }*/
 
     public boolean isGateActive(){
         if(isSensor1Active() || isSensor2Active()){
