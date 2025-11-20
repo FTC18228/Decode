@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Solo auto")
+@Autonomous(name="RED Solo auto")
 public class SoloAuto extends CommandOpMode {
     private static final Logger log = LoggerFactory.getLogger(SoloAuto.class);
 
@@ -49,7 +49,7 @@ public class SoloAuto extends CommandOpMode {
         Pose2d boxPose = new Pose2d(38, 32, Math.toRadians(180));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-        TurretSubsystem turretSubsystem = new TurretSubsystem(hardwareMap);
+        TurretSubsystem turretSubsystem = new TurretSubsystem(hardwareMap, telemetry, true);
         IntakeSubsystem intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
 
         turretSubsystem.setPreset(1, 0);

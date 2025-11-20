@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -29,18 +30,19 @@ public class TeleOpCommon {
     public TurretSubsystem turretSubsystem;
     public GamepadEx driverGamepad;
     Telemetry telemetry;
-    private TeleOpCommon(HardwareMap hardwareMap, Pose2d defaultPose, Gamepad gamepad1, Telemetry telemetry) {
+    private TeleOpCommon(HardwareMap hardwareMap, Pose2d defaultPose, Gamepad gamepad1, Telemetry telemetry, boolean useRed) {
         intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
         driveSubsystem = new DriveSubsystem(hardwareMap, defaultPose, 10);
-        turretSubsystem = new TurretSubsystem(hardwareMap);
+        turretSubsystem = new TurretSubsystem(hardwareMap, telemetry, useRed);
         driverGamepad = new GamepadEx(gamepad1);
         this.telemetry = telemetry;
 
         this.resetInstanceState();
+        CommandScheduler.getInstance().registerSubsystem(turretSubsystem);
     }
 
-    public static synchronized TeleOpCommon getInstance(HardwareMap hardwareMap, Pose2d defaultPose, Gamepad gamepad1, Telemetry telemetry) {
-        if(instance == null) instance = new TeleOpCommon(hardwareMap, defaultPose, gamepad1, telemetry);
+    public static synchronized TeleOpCommon getInstance(HardwareMap hardwareMap, Pose2d defaultPose, Gamepad gamepad1, Telemetry telemetry, boolean useRed) {
+        if(instance == null) instance = new TeleOpCommon(hardwareMap, defaultPose, gamepad1, telemetry, useRed);
         return instance;
     }
 
@@ -65,7 +67,15 @@ public class TeleOpCommon {
                 telemetry
         ));
 
-        this.driverGamepad.getGamepadButton(GamepadKeys.Button.A)
+        this.driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenActive(
+                        new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();})
+                )
+                .whenInactive(
+                        new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();})
+                );
+
+        this.driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenActive(
                         new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();})
                 )
@@ -94,22 +104,38 @@ public class TeleOpCommon {
                         new TurretStopCommand(turretSubsystem)
                 );
 
-        new Trigger(() -> {return this.driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) >= 0.5;})
+    /*    new Trigger(() -> {return this.driverGamepad.getTrigger(GamepadKeys.Button.A) >= 0.5;})
                 .whenActive(
                         new OuttakeCommand(this.intakeSubsystem)
         )
                 .whenInactive (
                         new IntakeOffCommand(this.intakeSubsystem)
-                );
+                ); */
 
-        new Trigger(() -> {return this.driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5;})
+////        this.driverGamepad.getGamepadTrigger(GamepadKeys.Trigger.RIGHT)
+////                .whenPressed(
+//                        new IntakeOnCommand(this.intakeSubsystem)
+//
+//                )
+//                .whenReleased(
+//                        new IntakeOffCommand(this.intakeSubsystem)
+//
+//                );
+
+       new Trigger(() -> {return this.driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5;})
                 .whenActive(
                         new IntakeOnCommand(this.intakeSubsystem)
                 )
                 .whenInactive(
                         new IntakeOffCommand(this.intakeSubsystem)
                 );
-
+        new Trigger(() -> {return this.driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) >= 0.5;})
+                .whenActive(
+                        new IntakeOnCommand(this.intakeSubsystem)
+                )
+                .whenInactive(
+                        new IntakeOffCommand(this.intakeSubsystem)
+                );
         this.driverGamepad.getGamepadButton(GamepadKeys.Button.START)
                 .whenPressed(
                     new InstantCommand(() -> {driveSubsystem.resetState();})
