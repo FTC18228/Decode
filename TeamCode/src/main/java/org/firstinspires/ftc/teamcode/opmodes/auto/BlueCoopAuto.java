@@ -49,7 +49,7 @@ public class BlueCoopAuto extends CommandOpMode {
         Pose2d boxPose = new Pose2d(38, 32, Math.toRadians(180));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-        TurretSubsystem turretSubsystem = new TurretSubsystem(hardwareMap);
+        TurretSubsystem turretSubsystem = new TurretSubsystem(hardwareMap, telemetry, false);
         IntakeSubsystem intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
 
         turretSubsystem.setPreset(1, 0);
@@ -67,12 +67,13 @@ public class BlueCoopAuto extends CommandOpMode {
         CommandScheduler.getInstance().schedule(
                 new WaitUntilCommand(this::isStarted).andThen(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> {intakeSubsystem.intakeOn();}),
                                 new InstantCommand(() -> {backwardsSet(drive);}),
-                                new WaitCommand(1500),
+                                new WaitCommand(800),
                                 new InstantCommand(() -> {zeroSet(drive);}),
-                                new InstantCommand(() -> {turretSubsystem.setPreset(0.75, .75);}),
-                                new WaitCommand(2000),
+                                new WaitCommand(15000),
+                                new InstantCommand(() -> {intakeSubsystem.intakeOn();}),
+                                new InstantCommand(() -> {turretSubsystem.setPreset(0.75, .7);}),
+                                new WaitCommand(3000),
                                 new InstantCommand(() -> {intakeSubsystem.visionlessStartWheel();}),
                                 new WaitCommand(750),
                                 new InstantCommand(() -> {intakeSubsystem.visionlessStopWheel();}),

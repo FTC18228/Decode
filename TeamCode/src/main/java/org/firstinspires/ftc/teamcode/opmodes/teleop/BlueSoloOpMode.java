@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.utils.TeleOpCommon;
 
-@TeleOp(name="RED Solo OpMode")
-public class SoloOpMode extends CommandOpMode {
+@TeleOp(name="Blue Solo OpMode")
+public class BlueSoloOpMode extends CommandOpMode {
     @Override
     public void initialize() {
         TeleOpCommon.hardResetInstance();
@@ -16,6 +16,6 @@ public class SoloOpMode extends CommandOpMode {
                 new Pose2d(0, 0, 0),
                 gamepad1,
                 telemetry,
-                true);
+                false);
     }
 }

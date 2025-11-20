@@ -45,7 +45,8 @@ public class Constants {
         public static String intakeSensor1Name = "sensor1";
         public static String intakeSensor2Name = "sensor2";
         public static String headlightName = "headlight";
-    }
+        public static String turretMotorName = "spinner";
+;    }
 
     @Configurable
     public static class TurretPresets {

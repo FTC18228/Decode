@@ -34,9 +34,9 @@ public class DriveDebug implements DebugInfo<String, Double> {
 
     @Override
     public void displayTelemetry(Telemetry telemetry) {
-        for(String key : values.keySet()) {
+       /* for(String key : values.keySet()) {
             telemetry.addData(key, values.get(key));
         }
-        telemetry.update();
+        telemetry.update();*/
     }
 }
