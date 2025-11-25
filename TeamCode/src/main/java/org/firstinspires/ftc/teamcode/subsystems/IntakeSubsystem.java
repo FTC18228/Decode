@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.bylazar.lights.Headlight;
 import com.bylazar.lights.LightsManager;
 import com.bylazar.lights.PanelsLights;
@@ -123,6 +127,28 @@ public class IntakeSubsystem extends SubsystemBase {
     public void visionlessStopWheel() {
         loadingMotor.setPower(0);
     }
+
+    public Command shootThreeAuto() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    telemetry.addData("Status", "WHEELS SHOULD SPIN NOW");
+                    telemetry.update();
+                }),
+                new InstantCommand(this::visionlessStartWheel),
+
+                new WaitCommand(750),   // ms (FTCLib uses milliseconds)
+
+                new InstantCommand(this::visionlessStopWheel),
+
+                new WaitCommand(1250),
+
+                new InstantCommand(() -> {
+                    telemetry.addData("Status", "WHEELS SHOULD NOT SPIN NOW");
+                    telemetry.update();
+                })
+        );
+    }
+
 
     public boolean isKickReady() {return kickReady;}
     public boolean isIntakeOn() {return intakeMotor.getPower() != 0;}

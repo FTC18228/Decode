@@ -94,13 +94,13 @@ public class TeleOpCommon {
 
         this.driverGamepad.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(
-                        new InstantCommand(() -> {this.turretSubsystem.setPreset(.65, 0);}),
+                        new InstantCommand(() -> {this.turretSubsystem.setPreset(.5, 1);}),
                         new TurretStopCommand(turretSubsystem)
                 );
 
         this.driverGamepad.getGamepadButton(GamepadKeys.Button.X)
                 .toggleWhenPressed(
-                        new InstantCommand(() -> {this.turretSubsystem.setPreset(.65, .85);}),
+                        new InstantCommand(() -> {this.turretSubsystem.setPreset(.70, .85);}),
                         new TurretStopCommand(turretSubsystem)
                 );
 

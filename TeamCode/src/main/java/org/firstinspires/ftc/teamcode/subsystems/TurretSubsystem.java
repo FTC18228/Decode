@@ -28,6 +28,10 @@ public class TurretSubsystem extends SubsystemBase {
 
     Telemetry telemetry;
 
+    boolean isTracking = true;
+
+    public void setTracking(boolean isTracking) {this.isTracking = isTracking;}
+
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
 
@@ -122,7 +126,8 @@ public class TurretSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-
+        if(isTracking) {
         processAprilTags();
+    }
     }
 }
