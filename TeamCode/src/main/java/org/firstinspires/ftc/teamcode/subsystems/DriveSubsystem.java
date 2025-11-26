@@ -60,6 +60,7 @@ public class DriveSubsystem extends SubsystemBase {
         speed = newSpeed;
     }
     public void resetState() {
+        this.drive.resetPinpoint();
         this.drive.localizer.setPose(defaultPose);
     }
 }
